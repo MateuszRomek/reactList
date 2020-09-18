@@ -29,4 +29,34 @@ router.post(
 	authController.createUser
 );
 
+router.post(
+	'/login',
+	[
+		body('email')
+			.not()
+			.isEmpty()
+			.withMessage('Emali field cannot be empty')
+			.isEmail()
+			.withMessage('Invalid email address'),
+		body('password')
+			.not()
+			.isEmpty()
+			.withMessage('Password cannot be empty')
+			.isLength({ min: 8 })
+			.withMessage('Password is too short - should be 8 characters minimum')
+			.custom((value) => {
+				const re = /(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/;
+				const match = re.test(value);
+				if (match === false) {
+					throw new Error(
+						'Password should contain at least one letter, one big letter, one number and one special character'
+					);
+				}
+
+				return true;
+			}),
+	],
+	authController.logInUser
+);
+
 module.exports = router;
