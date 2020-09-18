@@ -1,7 +1,8 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { useHistory } from 'react-router-dom';
+
 import {
 	FormElementContainer,
 	FormLabel,
@@ -28,7 +29,8 @@ interface Props {
 	history: object;
 }
 
-const SignUpForm: React.FC<RouteComponentProps> = (props) => {
+const SignUpForm: React.FC = () => {
+	const history = useHistory();
 	const formik = useFormik({
 		initialValues: {
 			name: '',
@@ -54,7 +56,7 @@ const SignUpForm: React.FC<RouteComponentProps> = (props) => {
 					throw response;
 				}
 				actions.resetForm();
-				props.history.push('/login');
+				history.push('/login');
 			} catch (err) {
 				//TODO Modal with error data.
 				console.log(err);
@@ -115,4 +117,4 @@ const SignUpForm: React.FC<RouteComponentProps> = (props) => {
 	);
 };
 
-export default withRouter(SignUpForm);
+export default SignUpForm;

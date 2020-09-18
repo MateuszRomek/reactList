@@ -1,6 +1,9 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+//import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import {
 	FormElementContainer,
 	FormLabel,
@@ -17,18 +20,39 @@ const validationSchema = Yup.object({
 });
 
 const LogInForm: React.FC = () => {
+	const history = useHistory();
 	const formik = useFormik({
 		initialValues: {
 			email: '',
 			password: '',
 		},
 		validationSchema: validationSchema,
-		onSubmit: (values, actions) => {
-			console.log(values);
-			actions.resetForm();
+		onSubmit: async (values, actions) => {
+			try {
+				const data = await fetch('http://localhost:8080/auth/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						email: values.email,
+						password: values.password,
+					}),
+				});
+
+				const response = await data.json();
+				if (data.status !== 200) {
+					throw response;
+				}
+				localStorage.setItem('token', response.token);
+				//Set user redux data.
+				actions.resetForm();
+				history.push('/todos');
+			} catch (err) {
+				//TODO Inform user about error
+			}
 		},
 	});
-
 	return (
 		<form onSubmit={formik.handleSubmit}>
 			<FormElementContainer>
@@ -36,7 +60,6 @@ const LogInForm: React.FC = () => {
 					<FormLabel htmlFor="email">Your Email Adress</FormLabel>
 					<FormInput
 						type="email"
-						required
 						name="email"
 						id="email"
 						onChange={formik.handleChange}
@@ -52,7 +75,6 @@ const LogInForm: React.FC = () => {
 					<FormLabel htmlFor="password">Password</FormLabel>
 					<FormInput
 						type="password"
-						required
 						name="password"
 						id="password"
 						onBlur={formik.handleBlur}
@@ -64,7 +86,7 @@ const LogInForm: React.FC = () => {
 					) : null}
 				</FormElementContainer>
 			</FormElementContainer>
-			<FormButton> Log in</FormButton>
+			<FormButton type="submit"> Log in</FormButton>
 		</form>
 	);
 };
