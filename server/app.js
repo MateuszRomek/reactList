@@ -26,7 +26,11 @@ app.use((error, req, res, next) => {
 	console.log(error);
 	const status = error.statusCode || 500;
 	const message = error.message;
-	res.status(status).json({ message: message, data: error.errors });
+	if (error.errors) {
+		res.status(status).json({ message: message, data: error.errors });
+	} else {
+		res.status(status).json({ message, status });
+	}
 });
 
 mongoose
