@@ -5,7 +5,6 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authentication');
-const { error } = require('console');
 
 app.use(bodyParser.json());
 
@@ -26,8 +25,10 @@ app.use((error, req, res, next) => {
 	console.log(error);
 	const status = error.statusCode || 500;
 	const message = error.message;
-	if (error.errors) {
-		res.status(status).json({ message: message, data: error.errors });
+	if (error.errorData) {
+		res
+			.status(status)
+			.json({ message: message, error: error.errorData, status });
 	} else {
 		res.status(status).json({ message, status });
 	}

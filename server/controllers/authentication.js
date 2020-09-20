@@ -11,14 +11,8 @@ exports.createUser = (req, res, next) => {
 	if (!errors.isEmpty()) {
 		const error = new Error('Validation failed');
 		error.statusCode = 422;
-		error.errors = errors.array().map((error) => {
-			const { param, msg } = error;
-			return {
-				[param]: {
-					errorText: msg,
-				},
-			};
-		});
+		error.errorData = errors.array({ onlyFirstError: true });
+
 		throw error;
 	}
 
@@ -32,8 +26,6 @@ exports.createUser = (req, res, next) => {
 			return user.save();
 		})
 		.then((result) => {
-			console.log(result);
-			//TODO Create JWT and send this to client
 			res.status(200).json({
 				message: 'User created',
 				user: {
@@ -61,27 +53,21 @@ exports.logInUser = async (req, res, next) => {
 	if (!errors.isEmpty()) {
 		const error = new Error('Validation failed');
 		error.statusCode = 422;
-		error.errors = errors.array().map((error) => {
-			const { param, msg } = error;
-			return {
-				[param]: {
-					errorText: msg,
-				},
-			};
-		});
-		throw error;
+		error.errorData = errors.array({ onlyFirstError: true });
+
+		return next(error);
 	}
 	const user = await User.findOne({ email });
 	if (!user) {
 		const error = new Error('There is no account with this e-mail');
 		error.statusCode = 404;
-		next(error);
+		return next(error);
 	}
 	const match = await bcrypt.compare(password, user.password);
 	if (!match) {
 		const error = new Error('Incorrect password');
 		error.statusCode = 401;
-		next(error);
+		return next(error);
 	}
 	jwt.sign(
 		{
@@ -93,7 +79,7 @@ exports.logInUser = async (req, res, next) => {
 			if (err) {
 				console.log(err);
 				const error = new Error('Internal error has occured');
-				next(error);
+				return next(error);
 			} else {
 				res.status(200).json({
 					token,

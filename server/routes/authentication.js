@@ -6,7 +6,13 @@ const { body } = require('express-validator');
 router.post(
 	'/signup',
 	[
-		body('name').not().isEmpty().withMessage('Name cannot be empty').isString(),
+		body('name')
+			.isLength({ min: 10 })
+			.withMessage('Invalid email address')
+			.not()
+			.isEmpty()
+			.withMessage('Name cannot be empty')
+			.isString(),
 		body('email').isEmail().withMessage('Invalid email address'),
 		body('password')
 			.not()
