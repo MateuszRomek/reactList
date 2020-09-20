@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import SignUp from '../../components/SignUp/SignUp';
 import LogIn from '../../components/LogIn/LogIn';
 import { ReactComponent as ToDoLogo } from '../../assets/svg/todoLogo.svg';
+import ReactModal from '../../components/UI/ReactModal/ReactModal';
 interface StyledProps {
 	isWhite: boolean;
 }
@@ -82,6 +83,7 @@ const MobileHeader = styled.div`
 const SignUpLogIn: React.FC = () => {
 	return (
 		<GridTemplate>
+			<ReactModal />
 			<DummyContainer>
 				<FlexCenter isWhite={false}>
 					<SvgContainer>
@@ -94,7 +96,6 @@ const SignUpLogIn: React.FC = () => {
 			<FlexCenter isWhite={true}>
 				<MobileHeader>
 					<ToDoLogo />
-
 					<Title>To-Dos</Title>
 				</MobileHeader>
 				<Switch>

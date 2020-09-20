@@ -2,3 +2,22 @@ body {
 	margin: 0;
 	font-family: 'Roboto', sans-serif;
 }
+.modal-enter {
+	opacity: 0 !important;
+	transform: translate(-50%, -200px) !important;
+}
+
+.modal-enter-active {
+	transition: transform 0.3s, opacity 0.3s;
+	opacity: 1 !important;
+	transform: translate(-50%, 0) !important;
+}
+
+.modal-exit {
+	opacity: 1 !important;
+	transform: translate(-50%, -200px) !important;
+}
+.modal-exit-active {
+	transition: transform 0.3s, opacity 0.3s;
+	opacity: 0 !important;
+}
