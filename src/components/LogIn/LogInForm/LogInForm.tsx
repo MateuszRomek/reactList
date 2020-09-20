@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-//import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
+import { setUserData } from '../../../redux/ducks/user';
 import {
 	FormElementContainer,
 	FormLabel,
@@ -11,6 +11,25 @@ import {
 	FormButton,
 	ErrorMessage,
 } from '../../Shared/SharedFormElements';
+import { setModalData, toggleModal } from '../../../redux/ducks/ui';
+
+interface ErrorObject {
+	[key: string]: {
+		errorText: string;
+	};
+}
+interface CorrectResponseObject {
+	uid: string;
+	token: string;
+	name: string;
+}
+interface FailedResponseObject {
+	message: string;
+	data?: ErrorObject[];
+	status: number;
+}
+
+type ResponseServer = CorrectResponseObject & FailedResponseObject;
 
 const validationSchema = Yup.object({
 	email: Yup.string()
@@ -20,6 +39,7 @@ const validationSchema = Yup.object({
 });
 
 const LogInForm: React.FC = () => {
+	const dispatch = useDispatch();
 	const history = useHistory();
 	const formik = useFormik({
 		initialValues: {
@@ -39,17 +59,26 @@ const LogInForm: React.FC = () => {
 						password: values.password,
 					}),
 				});
-
-				const response = await data.json();
+				const response: ResponseServer = await data.json();
 				if (data.status !== 200) {
 					throw response;
 				}
-				localStorage.setItem('token', response.token);
-				//Set user redux data.
+				const { name, uid, token } = response;
+				localStorage.setItem('token', token);
+				dispatch(setUserData(uid, name));
 				actions.resetForm();
 				history.push('/todos');
 			} catch (err) {
-				//TODO Inform user about error
+				if (err.error) {
+					const { message, error } = err;
+					const modalContent = error[0].msg;
+					dispatch(setModalData(message, modalContent));
+					dispatch(toggleModal);
+				} else {
+					const { message } = err;
+					dispatch(setModalData('Error!', message));
+					dispatch(toggleModal());
+				}
 			}
 		},
 	});

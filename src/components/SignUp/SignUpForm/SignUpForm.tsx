@@ -2,7 +2,6 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
-
 import {
 	FormElementContainer,
 	FormLabel,
@@ -10,7 +9,8 @@ import {
 	FormButton,
 	ErrorMessage,
 } from '../../Shared/SharedFormElements';
-
+import { useDispatch } from 'react-redux';
+import { toggleModal, setModalData } from '../../../redux/ducks/ui';
 const validationSchema = Yup.object({
 	name: Yup.string().required('This field cannot be empty'),
 	email: Yup.string()
@@ -31,6 +31,7 @@ interface Props {
 
 const SignUpForm: React.FC = () => {
 	const history = useHistory();
+	const dispatch = useDispatch();
 	const formik = useFormik({
 		initialValues: {
 			name: '',
@@ -58,8 +59,16 @@ const SignUpForm: React.FC = () => {
 				actions.resetForm();
 				history.push('/login');
 			} catch (err) {
-				//TODO Modal with error data.
-				console.log(err);
+				if (err.error) {
+					const { message, error } = err;
+					const modalContent = error[0].msg;
+					dispatch(setModalData(message, modalContent));
+					dispatch(toggleModal());
+				} else {
+					const { message } = err;
+					dispatch(setModalData('Error!', message));
+					dispatch(toggleModal());
+				}
 			}
 		},
 	});
