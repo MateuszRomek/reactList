@@ -1,13 +1,11 @@
 import {
 	IinitialState,
 	UserActionTypes,
-	SET_USER_TOKEN,
 	SET_USER_DATA,
-} from './userTypes';
+} from '../types/userTypes';
 
 const initialState: IinitialState = {
 	userId: '',
-	isToken: false,
 	name: '',
 };
 
