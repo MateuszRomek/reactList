@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
-import SignUpLogInTemplate from './templates/SignUpLogIn/SignLoginTemplate';
-import RootViewTemplate from './templates/RootView/RootViewTemplate';
+import SignUpLogInView from './views/SignUpLogInView/SignLoginView';
+import RootView from './views/RootView/RootView';
 import PrivateRoute from './routes/PrivateRoute';
 
 const App: React.FC = () => {
@@ -10,8 +10,9 @@ const App: React.FC = () => {
 		<>
 			<GlobalStyle />
 			<Switch>
-				<PrivateRoute path="/todos" Component={RootViewTemplate} />
-				<Route path="/" component={SignUpLogInTemplate} />
+				{/* <PrivateRoute path="/todos" Component={RootViewTemplate} /> */}
+				<Route path="/todos" component={RootView} />
+				<Route path="/" component={SignUpLogInView} />
 			</Switch>
 		</>
 	);
