@@ -2,6 +2,10 @@ body {
 	margin: 0;
 	font-family: 'Roboto', sans-serif;
 }
+#AbpLink {
+	display: none;
+}
+
 .modal-enter {
 	opacity: 0 !important;
 	transform: translate(-50%, -200px) !important;
