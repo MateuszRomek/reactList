@@ -3,6 +3,7 @@ import {
 	TOGGLE_MODAL,
 	UiActionTypes,
 	SET_MODAL_DATA,
+	TOGGLE_SIDE_NAVIGATION,
 } from '../types/uiTypes';
 
 const initialState: UiInitialState = {
@@ -12,6 +13,9 @@ const initialState: UiInitialState = {
 			title: '',
 			content: '',
 		},
+	},
+	sideNavigation: {
+		isSmall: false,
 	},
 };
 
@@ -37,6 +41,16 @@ export default (state = initialState, action: UiActionTypes) => {
 				},
 			};
 		}
+
+		case TOGGLE_SIDE_NAVIGATION: {
+			return {
+				...state,
+				sideNavigation: {
+					...state.sideNavigation,
+					isSmall: !state.sideNavigation.isSmall,
+				},
+			};
+		}
 		default:
 			return {
 				...state,
@@ -55,4 +69,8 @@ export const setModalData = (
 	type: SET_MODAL_DATA,
 	title,
 	content,
+});
+
+export const toggleSideNavigation = (): UiActionTypes => ({
+	type: TOGGLE_SIDE_NAVIGATION,
 });
