@@ -1,23 +1,96 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import UserData from './UserData/UserData';
-//import SunIcon from '../../assets/svg/sunSolid.svg';
 import UserStandardsLists from './UserStandardLists/UserStandardLists';
-import { ReactComponent as SunIcon } from '../../assets/svg/sunSolid.svg';
-
-const Container = styled.div`
+import AddNewList from './AddNewList/AddNewList';
+import { useDispatch, useSelector } from 'react-redux';
+import { UiReducer } from '../../redux/types/uiTypes';
+import { toggleSideNavigation } from '../../redux/ducks/ui';
+import { ReactComponent as GripIcon } from '../../assets/svg/gripLines.svg';
+interface StyledProps {
+	isSmallSideNav: boolean;
+}
+const Container = styled.div<StyledProps>`
+	position: relative;
 	display: flex;
-	width: 100%;
+	transition: width 0.2s;
+	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '280px')};
+	height: 100%;
 	flex-direction: column;
 	align-items: flex-start;
-	justify-content: center;
+	justify-content: flex-start;
+	border-right: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+	background-color: ${({ theme }) => theme.colors.lightGray};
+	overflow: hidden;
 `;
 
+const SideMenuButton = styled.button<StyledProps>`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	display: block;
+	border: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+	background-color: inherit;
+	padding: 0.6rem;
+	border-radius: 3px;
+	transition: background-color 0.2s ease-in-out;
+	&:hover {
+		cursor: pointer;
+		background-color: ${({ theme }) => theme.colors.hoverListLight};
+		border: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.09), 0 1px 1px rgba(0, 0, 0, 0.08);
+	}
+	&:active {
+		outline: none;
+	}
+	&:focus {
+		outline: none;
+	}
+
+	& svg {
+		display: block;
+		width: 1.8rem;
+		height: 1.8rem;
+	}
+`;
+const ButtonContainer = styled.div<StyledProps>`
+	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '280px')};
+	display: flex;
+	justify-content: ${({ isSmallSideNav }) =>
+		isSmallSideNav ? 'center' : 'flex-start'};
+	align-items: center;
+	padding: 1rem 0.9rem 0;
+`;
 const UserNavigation: React.FC = () => {
+	const isSmallSideNav = useSelector(
+		(state: UiReducer) => state.ui.sideNavigation.isSmall
+	);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		const width = window.innerWidth;
+		if (width < 600) {
+			dispatch(toggleSideNavigation());
+		}
+	}, [dispatch]);
+
 	return (
-		<Container>
-			<UserData userEmail={'mateusz.romek@outlook.com'} userName="Mateusz" />
-			<UserStandardsLists ListIcon={SunIcon} listName={'My Day'} />
+		<Container isSmallSideNav={isSmallSideNav}>
+			<ButtonContainer isSmallSideNav={isSmallSideNav}>
+				<SideMenuButton
+					isSmallSideNav={isSmallSideNav}
+					onClick={() => dispatch(toggleSideNavigation())}
+				>
+					<GripIcon />
+				</SideMenuButton>
+			</ButtonContainer>
+
+			<UserData
+				isSmall={isSmallSideNav}
+				userEmail={'mateusz.romek@outlook.com'}
+				userName="Mateusz"
+			/>
+			<UserStandardsLists isSmall={isSmallSideNav} />
+			<AddNewList isSmall={isSmallSideNav} />
 		</Container>
 	);
 };

@@ -1,17 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
+import { SvgContainer } from '../../Shared/SvgContainer';
 
 interface Props {
 	listName: string;
 	ListIcon: React.FC;
+	isSmallMenu: boolean;
 }
 
-const ListContainer = styled.div`
+interface StyledProps {
+	isSmallSideNav: boolean;
+}
+
+const ListContainer = styled.div<StyledProps>`
 	display: flex;
 	align-items: center;
-	justify-content: flex-start;
-	width: 100%;
-	padding: 0.6rem 1.5rem;
+	justify-content: ${({ isSmallSideNav }) =>
+		isSmallSideNav ? 'center' : 'flex-start'};
+	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '280px')};
+	padding: 0.9rem 1.5rem;
 
 	color: ${({ theme }) => theme.colors.darkText};
 	&:hover {
@@ -20,27 +27,19 @@ const ListContainer = styled.div`
 	}
 `;
 
-const IconContainer = styled.div`
-	width: 16px;
-	height: 16px;
-	margin-right: 1.2rem;
-	& svg {
-		width: 100%;
-		height: 100%;
-	}
-`;
-
-const NameContainer = styled.div`
+const NameContainer = styled.span`
+	display: inline-block;
 	font-size: 1.6rem;
+	margin-left: 1.2rem;
 `;
 
-const List: React.FC<Props> = ({ ListIcon, listName }) => {
+const List: React.FC<Props> = ({ ListIcon, listName, isSmallMenu }) => {
 	return (
-		<ListContainer>
-			<IconContainer>
+		<ListContainer isSmallSideNav={isSmallMenu}>
+			<SvgContainer>
 				<ListIcon />
-			</IconContainer>
-			<NameContainer>{listName}</NameContainer>
+			</SvgContainer>
+			{!isSmallMenu ? <NameContainer>{listName}</NameContainer> : null}
 		</ListContainer>
 	);
 };

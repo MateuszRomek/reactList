@@ -1,24 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 import List from '../List/List';
+import { ReactComponent as SunIcon } from '../../../assets/svg/sunSolid.svg';
+import { ReactComponent as CalendarIcon } from '../../../assets/svg/calendarSolid.svg';
+import { ReactComponent as HomeIcon } from '../../../assets/svg/homeSolid.svg';
+interface Props {
+	isSmall: boolean;
+}
+interface StyledProps {
+	isSmall: boolean;
+}
 
-const Container = styled.div`
+const Container = styled.div<StyledProps>`
+	margin-top: ${({ isSmall }) => (isSmall ? '5rem' : '0')};
 	display: flex;
-	width: 100%;
+	width: ${({ isSmall }) => (isSmall ? 'auto' : '100%')};
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: ${({ isSmall }) => (isSmall ? 'center' : 'flex-start')};
 	justify-content: center;
 `;
 
-interface Props {
-	listName: string;
-	ListIcon: React.FC;
-}
-
-const UserStandardsLists: React.FC<Props> = ({ ListIcon, listName }) => {
+const UserStandardsLists: React.FC<Props> = ({ isSmall }) => {
 	return (
-		<Container>
-			<List ListIcon={ListIcon} listName={listName} />
+		<Container isSmall={isSmall}>
+			<List isSmallMenu={isSmall} ListIcon={SunIcon} listName="My Day" />
+			<List isSmallMenu={isSmall} ListIcon={CalendarIcon} listName="Planned" />
+			<List isSmallMenu={isSmall} ListIcon={HomeIcon} listName="Tasks" />
 		</Container>
 	);
 };
