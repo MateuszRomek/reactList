@@ -5,7 +5,6 @@ const SALTROUNDS = 12;
 const jwt = require('jsonwebtoken');
 
 exports.createUser = (req, res, next) => {
-	//TODO connect mongodb to this and create user. Then res 200 status
 	const { name, email, password } = req.body;
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -26,7 +25,7 @@ exports.createUser = (req, res, next) => {
 			return user.save();
 		})
 		.then((result) => {
-			res.status(200).json({
+			res.status(201).json({
 				message: 'User created',
 				user: {
 					_id: result._id,
