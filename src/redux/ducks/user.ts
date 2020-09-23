@@ -7,6 +7,7 @@ import {
 const initialState: IinitialState = {
 	userId: '',
 	name: '',
+	email: '',
 };
 
 //Reducer
@@ -20,6 +21,7 @@ export default (
 				...state,
 				userId: action.userId,
 				name: action.name,
+				email: action.email,
 			};
 
 		default:
@@ -29,8 +31,13 @@ export default (
 	}
 };
 //Actions
-export const setUserData = (userId: string, name: string): UserActionTypes => ({
+export const setUserData = (
+	userId: string,
+	name: string,
+	email: string
+): UserActionTypes => ({
 	type: SET_USER_DATA,
 	userId,
 	name,
+	email,
 });
