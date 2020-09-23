@@ -19,7 +19,7 @@ const userSchema = new Schema(
 		lists: [
 			{
 				type: Schema.Types.ObjectId,
-				ref: 'todo',
+				ref: 'list',
 			},
 		],
 	},
