@@ -22,6 +22,7 @@ interface CorrectResponseObject {
 	uid: string;
 	token: string;
 	name: string;
+	email: string;
 }
 interface FailedResponseObject {
 	message: string;
@@ -63,9 +64,10 @@ const LogInForm: React.FC = () => {
 				if (data.status !== 200) {
 					throw response;
 				}
-				const { name, uid, token } = response;
+
+				const { name, uid, token, email } = response;
 				localStorage.setItem('token', token);
-				dispatch(setUserData(uid, name));
+				dispatch(setUserData(uid, name, email));
 				actions.resetForm();
 				history.push('/todos');
 			} catch (err) {
