@@ -19,7 +19,10 @@ const initialState: UiInitialState = {
 	},
 };
 
-export default (state = initialState, action: UiActionTypes) => {
+export default (
+	state = initialState,
+	action: UiActionTypes
+): UiInitialState => {
 	switch (action.type) {
 		case TOGGLE_MODAL:
 			return {
