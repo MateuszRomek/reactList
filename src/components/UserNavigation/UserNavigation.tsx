@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UiReducer } from '../../redux/types/uiTypes';
 import { toggleSideNavigation } from '../../redux/ducks/ui';
 import { ReactComponent as GripIcon } from '../../assets/svg/gripLines.svg';
+import { IuserReducer } from '../../redux/types/userTypes';
 interface StyledProps {
 	isSmallSideNav: boolean;
 }
@@ -65,7 +66,9 @@ const UserNavigation: React.FC = () => {
 	const isSmallSideNav = useSelector(
 		(state: UiReducer) => state.ui.sideNavigation.isSmall
 	);
+	const user = useSelector((state: IuserReducer) => state.user);
 	const dispatch = useDispatch();
+
 	useEffect(() => {
 		const width = window.innerWidth;
 		if (width < 600) {
@@ -86,8 +89,8 @@ const UserNavigation: React.FC = () => {
 
 			<UserData
 				isSmall={isSmallSideNav}
-				userEmail={'mateusz.romek@outlook.com'}
-				userName="Mateusz"
+				userEmail={user.email}
+				userName={user.name}
 			/>
 			<UserStandardsLists isSmall={isSmallSideNav} />
 			<AddNewList isSmall={isSmallSideNav} />
