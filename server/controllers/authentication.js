@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const List = require('../models/list');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const SALTROUNDS = 12;
@@ -24,12 +25,19 @@ exports.createUser = (req, res, next) => {
 			const user = new User({ name, email, password: hashPass });
 			return user.save();
 		})
-		.then((result) => {
-			res.status(201).json({
-				message: 'User created',
-				user: {
-					_id: result._id,
-				},
+		.then((user) => {
+			List.insertMany([
+				{ userId: user._id, name: 'My Day' },
+				{ userId: user._id, name: 'Planned' },
+				{ userId: user._id, name: 'Tasks' },
+			]).then((result) => {
+				console.log(result);
+				res.status(201).json({
+					message: 'User created',
+					user: {
+						_id: user._id,
+					},
+				});
 			});
 		})
 		.catch((err) => {
@@ -84,6 +92,7 @@ exports.logInUser = async (req, res, next) => {
 					token,
 					name: user.name,
 					uid: user._id,
+					email: user.email,
 				});
 			}
 		}
