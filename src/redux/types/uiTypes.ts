@@ -2,7 +2,7 @@ export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const SET_MODAL_DATA = 'SET_MODAL_DATA';
 export const TOGGLE_SIDE_NAVIGATION = 'TOGGLE_SIDE_NAVIGATION';
 interface uiModal {
-	isOpen: false;
+	isOpen: boolean;
 	message: {
 		title: string;
 		content: string;
