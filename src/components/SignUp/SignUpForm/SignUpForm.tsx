@@ -53,7 +53,7 @@ const SignUpForm: React.FC = () => {
 					}),
 				});
 				const response = await data.json();
-				if (data.status !== 200) {
+				if (data.status !== 201) {
 					throw response;
 				}
 				actions.resetForm();
