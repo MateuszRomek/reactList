@@ -3,16 +3,24 @@ import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IuserReducer } from '../redux/types/userTypes';
 
-const PrivateRoute = ({ Component, ...rest }: any) => {
+const PrivateRoute = ({ component: Component, ...rest }: any) => {
 	const selector = useSelector(({ user }: IuserReducer) => ({
 		name: user.name,
 		userId: user.userId,
+		email: user.email,
 	}));
-	const val = localStorage.getItem('token') && selector.name && selector.userId;
+	const v =
+		localStorage.getItem('token') &&
+		selector.name &&
+		selector.userId &&
+		selector.email
+			? true
+			: false;
+
 	return (
 		<Route
 			{...rest}
-			render={(props) => (val ? <Component {...props} /> : <Redirect to="/" />)}
+			render={(props) => (v ? <Component {...props} /> : <Redirect to="/" />)}
 		/>
 	);
 };
