@@ -5,7 +5,9 @@ exports.getAllLists = async (req, res, next) => {
 	try {
 		lists = await List.find({ userId });
 	} catch (err) {
-		const error = new Error('Internal problem occured');
+		const error = new Error(
+			'Internal problem occured, Cannot find any lists for user'
+		);
 		error.statusCode = 500;
 		return next(error);
 	}

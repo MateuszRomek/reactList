@@ -27,9 +27,9 @@ exports.createUser = (req, res, next) => {
 		})
 		.then((user) => {
 			List.insertMany([
-				{ userId: user._id, name: 'My Day' },
-				{ userId: user._id, name: 'Planned' },
-				{ userId: user._id, name: 'Tasks' },
+				{ userId: user._id, name: 'My Day', color: '', emoji: '', todos: [] },
+				{ userId: user._id, name: 'Planned', color: '', emoji: '', todos: [] },
+				{ userId: user._id, name: 'Tasks', color: '', emoji: '', todos: [] },
 			]).then((result) => {
 				console.log(result);
 				res.status(201).json({
