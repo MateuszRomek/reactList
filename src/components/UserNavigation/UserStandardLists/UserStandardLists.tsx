@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import List from '../List/List';
+import ListComponent from '../List/List';
 import { ReactComponent as SunIcon } from '../../../assets/svg/sunSolid.svg';
 import { ReactComponent as CalendarIcon } from '../../../assets/svg/calendarSolid.svg';
 import { ReactComponent as HomeIcon } from '../../../assets/svg/homeSolid.svg';
+import { List } from '../../../redux/types/listsTypes';
 interface Props {
 	isSmall: boolean;
+	defaultLists: List[];
 }
 interface StyledProps {
 	isSmall: boolean;
@@ -20,12 +22,37 @@ const Container = styled.div<StyledProps>`
 	justify-content: center;
 `;
 
-const UserStandardsLists: React.FC<Props> = ({ isSmall }) => {
+const decideListIcon = (listname: string) => {
+	switch (listname) {
+		case 'My Day': {
+			return SunIcon;
+		}
+		case 'Planned': {
+			return CalendarIcon;
+		}
+
+		case 'Tasks': {
+			return HomeIcon;
+		}
+		default: {
+			return HomeIcon;
+		}
+	}
+};
+
+const UserStandardsLists: React.FC<Props> = ({ defaultLists, isSmall }) => {
 	return (
 		<Container isSmall={isSmall}>
-			<List isSmallMenu={isSmall} ListIcon={SunIcon} listName="My Day" />
-			<List isSmallMenu={isSmall} ListIcon={CalendarIcon} listName="Planned" />
-			<List isSmallMenu={isSmall} ListIcon={HomeIcon} listName="Tasks" />
+			{defaultLists.map((list) => {
+				return (
+					<ListComponent
+						key={list._id}
+						isSmallMenu={isSmall}
+						listName={list.name}
+						ListIcon={decideListIcon(list.name)}
+					/>
+				);
+			})}
 		</Container>
 	);
 };

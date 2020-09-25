@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import UserData from './UserData/UserData';
 import UserStandardsLists from './UserStandardLists/UserStandardLists';
@@ -8,6 +8,8 @@ import { UiReducer } from '../../redux/types/uiTypes';
 import { toggleSideNavigation } from '../../redux/ducks/ui';
 import { ReactComponent as GripIcon } from '../../assets/svg/gripLines.svg';
 import { IuserReducer } from '../../redux/types/userTypes';
+import { fetchUserLists } from '../../redux/ducks/lists';
+import { IlistsReducer } from '../../redux/types/listsTypes';
 interface StyledProps {
 	isSmallSideNav: boolean;
 }
@@ -67,14 +69,21 @@ const UserNavigation: React.FC = () => {
 		(state: UiReducer) => state.ui.sideNavigation.isSmall
 	);
 	const user = useSelector((state: IuserReducer) => state.user);
-	const dispatch = useDispatch();
+	const listsState = useSelector((state: IlistsReducer) => state.lists);
 
+	const dispatch = useDispatch();
+	const stableDispatch = useCallback(dispatch, []);
 	useEffect(() => {
 		const width = window.innerWidth;
 		if (width < 600) {
-			dispatch(toggleSideNavigation());
+			stableDispatch(toggleSideNavigation());
 		}
-	}, [dispatch]);
+	}, [stableDispatch]);
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		stableDispatch(fetchUserLists(token));
+	}, [stableDispatch]);
 
 	return (
 		<Container isSmallSideNav={isSmallSideNav}>
@@ -92,7 +101,10 @@ const UserNavigation: React.FC = () => {
 				userEmail={user.email}
 				userName={user.name}
 			/>
-			<UserStandardsLists isSmall={isSmallSideNav} />
+			<UserStandardsLists
+				defaultLists={listsState.lists}
+				isSmall={isSmallSideNav}
+			/>
 			<AddNewList isSmall={isSmallSideNav} />
 		</Container>
 	);
