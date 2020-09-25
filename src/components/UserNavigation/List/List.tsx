@@ -1,16 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SvgContainer } from '../../Shared/SvgContainer';
-
+import { Link } from 'react-router-dom';
 interface Props {
 	listName: string;
-	ListIcon: React.FC;
+	ListIcon: React.FunctionComponent<
+		React.SVGProps<SVGSVGElement> & {
+			title?: string | undefined;
+		}
+	>;
 	isSmallMenu: boolean;
 }
 
 interface StyledProps {
 	isSmallSideNav: boolean;
 }
+
+const StyledLink = styled(Link)`
+	text-decoration: none;
+`;
 
 const ListContainer = styled.div<StyledProps>`
 	display: flex;
@@ -35,12 +43,14 @@ const NameContainer = styled.span`
 
 const List: React.FC<Props> = ({ ListIcon, listName, isSmallMenu }) => {
 	return (
-		<ListContainer isSmallSideNav={isSmallMenu}>
-			<SvgContainer>
-				<ListIcon />
-			</SvgContainer>
-			{!isSmallMenu ? <NameContainer>{listName}</NameContainer> : null}
-		</ListContainer>
+		<StyledLink to={`/todos/${listName.toLowerCase()}`}>
+			<ListContainer isSmallSideNav={isSmallMenu}>
+				<SvgContainer>
+					<ListIcon />
+				</SvgContainer>
+				{!isSmallMenu ? <NameContainer>{listName}</NameContainer> : null}
+			</ListContainer>
+		</StyledLink>
 	);
 };
 
