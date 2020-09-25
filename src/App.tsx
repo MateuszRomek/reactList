@@ -10,7 +10,10 @@ const App: React.FC = () => {
 		<>
 			<GlobalStyle />
 			<Switch>
-				{/* <PrivateRoute path="/todos" Component={RootViewTemplate} /> */}
+				{/* <PrivateRoute path="/todos/:todoName" component={RootView} />
+				<PrivateRoute path="/todos" component={RootView} /> */}
+
+				<Route path="/todos/:todoName" component={RootView} />
 				<Route path="/todos" component={RootView} />
 				<Route path="/" component={SignUpLogInView} />
 			</Switch>
