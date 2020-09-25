@@ -4,11 +4,13 @@ import {
 	ListsActionTypes,
 	SET_FETCHING,
 	FETCH_USER_LISTS,
-	ResponseList,
+	ResponseElement,
+	List,
 } from './../types/listsTypes';
 
 const initialState: ListsInitialState = {
 	isFetching: false,
+	lists: [],
 };
 
 const listsReducer = (state = initialState, action: ListsActionTypes) => {
@@ -17,6 +19,13 @@ const listsReducer = (state = initialState, action: ListsActionTypes) => {
 			return {
 				...state,
 				isFetching: action.fetching,
+			};
+		}
+
+		case FETCH_USER_LISTS: {
+			return {
+				...state,
+				lists: action.lists,
 			};
 		}
 
@@ -35,22 +44,36 @@ export const setFetching = (fetching: boolean): ListsActionTypes => ({
 	fetching,
 });
 
-const setListsData = (lists: ResponseList[]): ListsActionTypes => ({
+const setListsData = (lists: List[]): ListsActionTypes => ({
 	type: FETCH_USER_LISTS,
 	lists,
 });
 
-//TODO set lists state + manipulate data response to match ResponseList type
 export const fetchUserLists = (token: string | null) => {
 	return (dispatch: Dispatch<ListsActionTypes>) => {
 		dispatch(setFetching(true));
-		return fetch('http://localhost:8080/lists', {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer  ${token}`,
-			},
-		})
-			.then((result) => result.json())
-			.then((data) => console.log(data));
+		return (
+			fetch('http://localhost:8080/lists', {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer  ${token}`,
+				},
+			})
+				.then((result) => result.json())
+				.then((data) => {
+					const responseList: List[] = data.lists.map((el: ResponseElement) => {
+						return {
+							_id: el._id,
+							name: el.name,
+							color: el.color,
+							emoji: el.emoji,
+						};
+					});
+					dispatch(setListsData(responseList));
+					dispatch(setFetching(false));
+				})
+				//TODO dispatch error event
+				.catch((err) => {})
+		);
 	};
 };

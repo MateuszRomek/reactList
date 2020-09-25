@@ -1,16 +1,17 @@
 export const SAVE_LIST_DATA = 'SAVE_LIST_DATA';
 export const SET_FETCHING = 'SET_FETCHING';
 export const FETCH_USER_LISTS = 'FETCH_USER_LISTS';
+
+//TODO ADD TODO ARRAY
 export interface List {
 	name: string;
 	emoji: string;
 	color: string;
+	_id: string;
 }
 
 export interface ListsInitialState {
-	lists?: {
-		[key: string]: List;
-	};
+	lists: List[];
 	isFetching: boolean;
 }
 
@@ -23,14 +24,25 @@ export interface SetFetching {
 	fetching: boolean;
 }
 
-export interface ResponseList {
-	_id: string;
-	name: string;
-}
-
 export interface FetchUserLists {
 	type: typeof FETCH_USER_LISTS;
-	lists: ResponseList[];
+	lists: List[];
 }
 
 export type ListsActionTypes = SaveListDat | SetFetching | FetchUserLists;
+
+export interface ResponseElement {
+	createdAt: string;
+	name: string;
+	todos: [];
+	updatedAt: string;
+	userId: string;
+	__v: number;
+	color: string;
+	emoji: string;
+	_id: string;
+}
+
+export interface IlistsReducer {
+	lists: ListsInitialState;
+}
