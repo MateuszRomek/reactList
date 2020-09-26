@@ -10,7 +10,9 @@ const isAuth = (req, res, next) => {
 	jwt.verify(token, process.env.SECRET, function (err, decoded) {
 		if (err) {
 			console.log(err);
-			res.status(401).json({ message: 'UNAUTHORIZED!' });
+			const error = new Error(`UNAUTHORIZED! ${err.message}`);
+			error.statusCode = 401;
+			throw error;
 		} else {
 			req.userId = decoded.uId;
 			next();

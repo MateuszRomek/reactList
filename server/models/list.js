@@ -21,8 +21,7 @@ const listSchema = new Schema(
 		},
 		todos: [
 			{
-				type: Schema.Types.ObjectId,
-				ref: 'todo',
+				todoId: String,
 			},
 		],
 	},
