@@ -6,6 +6,8 @@ import {
 	FETCH_USER_LISTS,
 	ResponseElement,
 	List,
+	PostListResponse,
+	CREATE_NEW_LIST,
 } from './../types/listsTypes';
 
 const initialState: ListsInitialState = {
@@ -26,6 +28,16 @@ const listsReducer = (state = initialState, action: ListsActionTypes) => {
 			return {
 				...state,
 				lists: action.lists,
+			};
+		}
+
+		case CREATE_NEW_LIST: {
+			const copyLists = [...state.lists];
+			copyLists.push(action.list);
+
+			return {
+				...state,
+				lists: copyLists,
 			};
 		}
 
@@ -59,21 +71,54 @@ export const fetchUserLists = (token: string | null) => {
 					Authorization: `Bearer  ${token}`,
 				},
 			})
-				.then((result) => result.json())
-				.then((data) => {
-					const responseList: List[] = data.lists.map((el: ResponseElement) => {
-						return {
-							_id: el._id,
-							name: el.name,
-							color: el.color,
-							emoji: el.emoji,
-						};
-					});
+				.then((response) => response.json())
+				.then((result) => {
+					if (result.status) throw result;
+					const responseList: List[] = result.lists.map(
+						(el: ResponseElement) => {
+							return {
+								_id: el._id,
+								name: el.name,
+								color: el.color,
+								emoji: el.emoji,
+							};
+						}
+					);
 					dispatch(setListsData(responseList));
 					dispatch(setFetching(false));
 				})
 				//TODO dispatch error event
-				.catch((err) => {})
+				.catch((err) => {
+					console.log(err);
+					//message: string, status
+				})
 		);
+	};
+};
+
+const createNewList = (list: List): ListsActionTypes => ({
+	type: CREATE_NEW_LIST,
+	list,
+});
+
+export const postNewList = (token: string | null, listName: string) => {
+	return (dispatch: Dispatch<ListsActionTypes>) => {
+		return fetch('http://localhost:8080/lists/create', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer  ${token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				listName,
+			}),
+		})
+			.then((response) => response.json())
+			.then((result: PostListResponse) => {
+				if (result.status !== 201) throw result;
+
+				dispatch(createNewList(result.list));
+			})
+			.catch((err) => console.log(err));
 	};
 };
