@@ -105,7 +105,7 @@ const UserNavigation: React.FC = () => {
 				defaultLists={listsState.lists}
 				isSmall={isSmallSideNav}
 			/>
-			<AddNewList isSmall={isSmallSideNav} />
+			<AddNewList userId={user.userId} isSmall={isSmallSideNav} />
 		</Container>
 	);
 };

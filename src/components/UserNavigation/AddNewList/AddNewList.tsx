@@ -2,11 +2,13 @@ import React, { createRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { ReactComponent as PlusIcon } from '../../../assets/svg/plusSolid.svg';
+import { postNewList } from '../../../redux/ducks/lists';
 import { toggleSideNavigation } from '../../../redux/ducks/ui';
 import { SvgContainer } from '../../Shared/SvgContainer';
 
 interface Props {
 	isSmall: boolean;
+	userId: string;
 }
 
 interface BackgroudProps {
@@ -37,7 +39,7 @@ const AddInput = styled.input`
 	}
 `;
 
-const AddContainer = styled.div<BackgroudProps & StyledProps>`
+const AddContainer = styled.form<BackgroudProps & StyledProps>`
 	display: flex;
 	width: ${({ isSmall }) => (isSmall ? '5rem' : '28rem')};
 	align-items: center;
@@ -68,17 +70,24 @@ const AddButton = styled.button`
 	}
 `;
 
-const AddNewList: React.FC<Props> = ({ isSmall }) => {
+const AddNewList: React.FC<Props> = ({ isSmall, userId }) => {
 	const [isInputFocused, setInputFocused] = useState(false);
+	const [newListName, setListName] = useState('');
+	const handleListNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setListName(e.target.value);
+	};
 	const inputRef = createRef<HTMLInputElement>();
 	const dispatch = useDispatch();
-	const handleButtonClick = () => {
-		if (inputRef.current?.value) {
-			//TODO POST TO SERVER WITH NEW LIST DATA
+	const handleSubmitButton = (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
+		e.preventDefault();
+		if (inputRef.current?.value && newListName.length > 0) {
+			const token = localStorage.getItem('token');
+			dispatch(postNewList(token, newListName));
 		} else {
 			if (isSmall) {
 				dispatch(toggleSideNavigation());
-				inputRef.current?.focus();
 			} else {
 				inputRef.current?.focus();
 			}
@@ -86,7 +95,7 @@ const AddNewList: React.FC<Props> = ({ isSmall }) => {
 	};
 	return (
 		<AddContainer isSmall={isSmall} isInputFocused={isInputFocused}>
-			<AddButton onClick={handleButtonClick}>
+			<AddButton type="submit" onClick={(e) => handleSubmitButton(e)}>
 				<SvgContainer>
 					<PlusIcon />
 				</SvgContainer>
@@ -94,7 +103,8 @@ const AddNewList: React.FC<Props> = ({ isSmall }) => {
 
 			{!isSmall ? (
 				<AddInput
-					onClick={handleButtonClick}
+					onChange={(e) => handleListNameChange(e)}
+					type="text"
 					onBlur={() => setInputFocused(false)}
 					onFocus={() => setInputFocused(true)}
 					ref={inputRef}
