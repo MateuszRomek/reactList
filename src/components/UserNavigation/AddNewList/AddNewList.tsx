@@ -1,10 +1,10 @@
 import React, { createRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { ReactComponent as PlusIcon } from '../../../assets/svg/plusSolid.svg';
+import PlusIcon from '../../../assets/svg/plusSolid.svg';
 import { postNewList } from '../../../redux/ducks/lists';
 import { toggleSideNavigation } from '../../../redux/ducks/ui';
-import { SvgContainer } from '../../Shared/SvgContainer';
+import { SvgImage } from '../../Shared/SvgContainer';
 
 interface Props {
 	isSmall: boolean;
@@ -85,6 +85,7 @@ const AddNewList: React.FC<Props> = ({ isSmall, userId }) => {
 		if (inputRef.current?.value && newListName.length > 0) {
 			const token = localStorage.getItem('token');
 			dispatch(postNewList(token, newListName));
+			inputRef.current.value = '';
 		} else {
 			if (isSmall) {
 				dispatch(toggleSideNavigation());
@@ -96,9 +97,7 @@ const AddNewList: React.FC<Props> = ({ isSmall, userId }) => {
 	return (
 		<AddContainer isSmall={isSmall} isInputFocused={isInputFocused}>
 			<AddButton type="submit" onClick={(e) => handleSubmitButton(e)}>
-				<SvgContainer>
-					<PlusIcon />
-				</SvgContainer>
+				<SvgImage src={PlusIcon} />
 			</AddButton>
 
 			{!isSmall ? (
