@@ -1,10 +1,6 @@
 import styled from 'styled-components';
-export const SvgContainer = styled.div`
+
+export const SvgImage = styled.img`
 	width: 16px;
 	height: 16px;
-
-	& svg {
-		width: 100%;
-		height: 100%;
-	}
 `;
