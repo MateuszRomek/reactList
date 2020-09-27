@@ -4,7 +4,6 @@ import {
 	ListsActionTypes,
 	SET_FETCHING,
 	FETCH_USER_LISTS,
-	ResponseElement,
 	List,
 	PostListResponse,
 	CREATE_NEW_LIST,

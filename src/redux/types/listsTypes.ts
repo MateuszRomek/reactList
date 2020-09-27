@@ -37,18 +37,6 @@ export interface FetchUserLists {
 	userLists: List[];
 }
 
-export interface ResponseElement {
-	createdAt: string;
-	name: string;
-	todos: [];
-	updatedAt: string;
-	userId: string;
-	__v: number;
-	color: string;
-	emoji: string;
-	_id: string;
-}
-
 export interface IlistsReducer {
 	lists: ListsInitialState;
 }
