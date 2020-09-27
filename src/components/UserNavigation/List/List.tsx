@@ -1,14 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SvgContainer } from '../../Shared/SvgContainer';
+import { SvgImage } from '../../Shared/SvgContainer';
 import { Link } from 'react-router-dom';
+import { apppendDots } from '../../../utils/appendDots';
 interface Props {
 	listName: string;
-	ListIcon: React.FunctionComponent<
-		React.SVGProps<SVGSVGElement> & {
-			title?: string | undefined;
-		}
-	>;
+	listIcon?: string;
+	listEmoji?: string;
 	isSmallMenu: boolean;
 }
 
@@ -18,6 +16,7 @@ interface StyledProps {
 
 const StyledLink = styled(Link)`
 	text-decoration: none;
+	width: 100%;
 `;
 
 const ListContainer = styled.div<StyledProps>`
@@ -27,7 +26,7 @@ const ListContainer = styled.div<StyledProps>`
 		isSmallSideNav ? 'center' : 'flex-start'};
 	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '280px')};
 	padding: 0.9rem 1.5rem;
-
+	width: 100%;
 	color: ${({ theme }) => theme.colors.darkText};
 	&:hover {
 		background-color: ${({ theme }) => theme.colors.hoverListLight};
@@ -41,14 +40,31 @@ const NameContainer = styled.span`
 	margin-left: 1.2rem;
 `;
 
-const List: React.FC<Props> = ({ ListIcon, listName, isSmallMenu }) => {
+const EmojiSpan = styled.span`
+	display: block;
+	font-size: 1.5rem;
+`;
+
+const List: React.FC<Props> = ({
+	listEmoji,
+	listIcon,
+	listName,
+	isSmallMenu,
+}) => {
 	return (
 		<StyledLink to={`/todos/${listName.toLowerCase()}`}>
 			<ListContainer isSmallSideNav={isSmallMenu}>
-				<SvgContainer>
-					<ListIcon />
-				</SvgContainer>
-				{!isSmallMenu ? <NameContainer>{listName}</NameContainer> : null}
+				{listEmoji ? (
+					<EmojiSpan>{listEmoji}</EmojiSpan>
+				) : (
+					<SvgImage src={listIcon} />
+				)}
+
+				{!isSmallMenu ? (
+					<NameContainer>
+						{listName.length > 17 ? apppendDots(listName) : listName}
+					</NameContainer>
+				) : null}
 			</ListContainer>
 		</StyledLink>
 	);
