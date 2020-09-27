@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import UserData from './UserData/UserData';
-import UserStandardsLists from './UserStandardLists/UserStandardLists';
+import UserLists from './UserStandardLists/UserLists';
 import AddNewList from './AddNewList/AddNewList';
 import { useDispatch, useSelector } from 'react-redux';
 import { UiReducer } from '../../redux/types/uiTypes';
@@ -101,10 +101,19 @@ const UserNavigation: React.FC = () => {
 				userEmail={user.email}
 				userName={user.name}
 			/>
-			<UserStandardsLists
-				defaultLists={listsState.lists}
+			<UserLists
+				isDefaultLists={true}
+				listsArray={listsState.defaultLists}
 				isSmall={isSmallSideNav}
 			/>
+			{listsState.userLists.length > 0 ? (
+				<UserLists
+					isDefaultLists={false}
+					listsArray={listsState.userLists}
+					isSmall={isSmallSideNav}
+				/>
+			) : null}
+
 			<AddNewList userId={user.userId} isSmall={isSmallSideNav} />
 		</Container>
 	);
