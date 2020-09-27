@@ -8,11 +8,14 @@ import {
 	List,
 	PostListResponse,
 	CREATE_NEW_LIST,
+	FetchUserListsResult,
 } from './../types/listsTypes';
 
+//TODO CHANGE STATE TO TWO LISTS
 const initialState: ListsInitialState = {
 	isFetching: false,
-	lists: [],
+	defaultLists: [],
+	userLists: [],
 };
 
 const listsReducer = (state = initialState, action: ListsActionTypes) => {
@@ -27,17 +30,18 @@ const listsReducer = (state = initialState, action: ListsActionTypes) => {
 		case FETCH_USER_LISTS: {
 			return {
 				...state,
-				lists: action.lists,
+				defaultLists: action.defaultLists,
+				userLists: action.userLists,
 			};
 		}
 
 		case CREATE_NEW_LIST: {
-			const copyLists = [...state.lists];
+			const copyLists = [...state.userLists];
 			copyLists.push(action.list);
 
 			return {
 				...state,
-				lists: copyLists,
+				userLists: copyLists,
 			};
 		}
 
@@ -56,9 +60,13 @@ export const setFetching = (fetching: boolean): ListsActionTypes => ({
 	fetching,
 });
 
-const setListsData = (lists: List[]): ListsActionTypes => ({
+const setListsData = (
+	defaultLists: List[],
+	userLists: List[]
+): ListsActionTypes => ({
 	type: FETCH_USER_LISTS,
-	lists,
+	defaultLists,
+	userLists,
 });
 
 export const fetchUserLists = (token: string | null) => {
@@ -72,19 +80,11 @@ export const fetchUserLists = (token: string | null) => {
 				},
 			})
 				.then((response) => response.json())
-				.then((result) => {
+				.then((result: FetchUserListsResult) => {
 					if (result.status) throw result;
-					const responseList: List[] = result.lists.map(
-						(el: ResponseElement) => {
-							return {
-								_id: el._id,
-								name: el.name,
-								color: el.color,
-								emoji: el.emoji,
-							};
-						}
-					);
-					dispatch(setListsData(responseList));
+					const { defaultLists, userLists } = result;
+
+					dispatch(setListsData(defaultLists, userLists));
 					dispatch(setFetching(false));
 				})
 				//TODO dispatch error event

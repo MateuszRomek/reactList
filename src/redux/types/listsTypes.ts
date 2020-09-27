@@ -8,10 +8,12 @@ export interface List {
 	emoji: string;
 	color: string;
 	_id: string;
+	todos: [];
 }
 
 export interface ListsInitialState {
-	lists: List[];
+	defaultLists: List[];
+	userLists: List[];
 	isFetching: boolean;
 }
 
@@ -23,10 +25,16 @@ export interface SetFetching {
 	type: typeof SET_FETCHING;
 	fetching: boolean;
 }
-
+export interface FetchUserListsResult {
+	message: string;
+	defaultLists: List[];
+	userLists: List[];
+	status?: number;
+}
 export interface FetchUserLists {
 	type: typeof FETCH_USER_LISTS;
-	lists: List[];
+	defaultLists: List[];
+	userLists: List[];
 }
 
 export interface ResponseElement {
