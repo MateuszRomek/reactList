@@ -8,7 +8,10 @@ const listSchema = new Schema(
 			required: true,
 			ref: 'user',
 		},
-
+		isDefaultList: {
+			type: Boolean,
+			required: true,
+		},
 		name: {
 			type: String,
 			required: true,

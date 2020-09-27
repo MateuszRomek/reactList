@@ -16,9 +16,31 @@ exports.getAllLists = async (req, res, next) => {
 		return res.status(404).json({ message: 'User does not have any lists' });
 	}
 
+	const userLists = lists
+		.filter((list) => list.isDefaultList === false)
+		.map((list) => ({
+			_id: list._id,
+			name: list.name,
+			emoji: list.emoji,
+			color: list.color,
+			todos: list.todos,
+		}));
+	const defaultLists = lists
+		.filter((list) => list.isDefaultList === true)
+		.map((list) => ({
+			_id: list._id,
+			name: list.name,
+			emoji: list.emoji,
+			color: list.color,
+			todos: list.todos,
+		}));
+
+	console.log('user', userLists);
+	console.log('def', defaultLists);
 	res.status(200).json({
 		message: 'Lists fetched',
-		lists,
+		defaultLists,
+		userLists,
 	});
 };
 
@@ -29,9 +51,10 @@ exports.createList = async (req, res, next) => {
 	const list = new List({
 		userId: user._id,
 		name: listName,
-		emoji: '',
+		emoji: '📝',
 		color: '',
 		todos: [],
+		isDefaultList: false,
 	});
 	const createdList = await list.save();
 	res.status(201).json({
