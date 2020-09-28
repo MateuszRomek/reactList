@@ -2,19 +2,23 @@ export const SAVE_LIST_DATA = 'SAVE_LIST_DATA';
 export const SET_FETCHING = 'SET_FETCHING';
 export const FETCH_USER_LISTS = 'FETCH_USER_LISTS';
 export const CREATE_NEW_LIST = 'CREATE_NEW_LIST';
-//TODO ADD TODO ARRAY
+export const UPDATE_LIST_NAME = 'UPDATE_LIST_NAME';
+export const SET_CURRENT_LIST = 'SET_CURRENT_LIST';
+export const CHANGE_LIST_NAME = 'CHANGE_LIST_NAME';
 export interface List {
 	name: string;
 	emoji: string;
 	color: string;
 	_id: string;
 	todos: [];
+	isDefaultList: boolean;
 }
 
 export interface ListsInitialState {
 	defaultLists: List[];
 	userLists: List[];
 	isFetching: boolean;
+	currentList: List;
 }
 
 export interface SaveListDat {
@@ -52,8 +56,26 @@ export interface PostListResponse {
 	list: List;
 }
 
+export interface SetCurrentList {
+	type: typeof SET_CURRENT_LIST;
+	_id: string;
+}
+
+export interface ChangeListName {
+	type: typeof CHANGE_LIST_NAME;
+	newName: string;
+}
+
+export interface UpdateName {
+	type: typeof UPDATE_LIST_NAME;
+	newName: string | undefined;
+}
+
 export type ListsActionTypes =
 	| SaveListDat
 	| SetFetching
 	| FetchUserLists
-	| CreateNewList;
+	| CreateNewList
+	| SetCurrentList
+	| ChangeListName
+	| UpdateName;

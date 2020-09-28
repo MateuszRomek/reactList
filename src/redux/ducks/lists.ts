@@ -1,4 +1,6 @@
+import { listenerCount } from 'process';
 import { Dispatch } from 'react';
+import findList from '../../utils/findList';
 import {
 	ListsInitialState,
 	ListsActionTypes,
@@ -8,16 +10,32 @@ import {
 	PostListResponse,
 	CREATE_NEW_LIST,
 	FetchUserListsResult,
+	SetCurrentList,
+	SET_CURRENT_LIST,
+	CHANGE_LIST_NAME,
+	ChangeListName,
+	UpdateName,
+	UPDATE_LIST_NAME,
 } from './../types/listsTypes';
 
-//TODO CHANGE STATE TO TWO LISTS
 const initialState: ListsInitialState = {
 	isFetching: false,
 	defaultLists: [],
 	userLists: [],
+	currentList: {
+		_id: '',
+		color: '',
+		emoji: '',
+		isDefaultList: false,
+		name: '',
+		todos: [],
+	},
 };
 
-const listsReducer = (state = initialState, action: ListsActionTypes) => {
+const listsReducer = (
+	state = initialState,
+	action: ListsActionTypes
+): ListsInitialState => {
 	switch (action.type) {
 		case SET_FETCHING: {
 			return {
@@ -44,6 +62,50 @@ const listsReducer = (state = initialState, action: ListsActionTypes) => {
 			};
 		}
 
+		case SET_CURRENT_LIST: {
+			const { defaultLists, userLists } = state;
+			const selectedList = findList(action._id, defaultLists, userLists);
+
+			return {
+				...state,
+				currentList: selectedList,
+			};
+		}
+		case CHANGE_LIST_NAME: {
+			const { newName } = action;
+
+			return {
+				...state,
+				currentList: {
+					...state.currentList,
+					name: newName,
+				},
+			};
+		}
+		case UPDATE_LIST_NAME: {
+			const { newName } = action;
+			if (newName === undefined) return { ...state };
+			const { userLists, currentList } = state;
+			const currentListName = userLists.find(
+				(list) => list._id === currentList._id
+			)?.name;
+			if (currentListName !== newName) {
+				const userListsCopy = userLists.map((list) => {
+					if (list._id === currentList._id) {
+						list.name = newName;
+					}
+					return list;
+				});
+				return {
+					...state,
+					userLists: userListsCopy,
+				};
+			} else {
+				return {
+					...state,
+				};
+			}
+		}
 		default: {
 			return {
 				...state,
@@ -121,3 +183,17 @@ export const postNewList = (token: string | null, listName: string) => {
 			.catch((err) => console.log(err));
 	};
 };
+export const setCurrentList = (_id: string): SetCurrentList => ({
+	type: SET_CURRENT_LIST,
+	_id,
+});
+
+export const changeListName = (newName: string): ChangeListName => ({
+	type: CHANGE_LIST_NAME,
+	newName,
+});
+
+export const updateListName = (newName: string | undefined): UpdateName => ({
+	type: UPDATE_LIST_NAME,
+	newName,
+});
