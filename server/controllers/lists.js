@@ -24,6 +24,7 @@ exports.getAllLists = async (req, res, next) => {
 			emoji: list.emoji,
 			color: list.color,
 			todos: list.todos,
+			isDefaultList: list.isDefaultList,
 		}));
 	const defaultLists = lists
 		.filter((list) => list.isDefaultList === true)
@@ -33,10 +34,9 @@ exports.getAllLists = async (req, res, next) => {
 			emoji: list.emoji,
 			color: list.color,
 			todos: list.todos,
+			isDefaultList: list.isDefaultList,
 		}));
 
-	console.log('user', userLists);
-	console.log('def', defaultLists);
 	res.status(200).json({
 		message: 'Lists fetched',
 		defaultLists,
@@ -67,6 +67,7 @@ exports.createList = async (req, res, next) => {
 			emoji: createdList.emoji,
 			color: createdList.color,
 			todos: createdList.todos,
+			isDefaultList: createdList.isDefaultList,
 		},
 	});
 };
