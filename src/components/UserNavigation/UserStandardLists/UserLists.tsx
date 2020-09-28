@@ -53,6 +53,7 @@ const UserStandardsLists: React.FC<Props> = ({
 						return (
 							<ListComponent
 								key={list._id}
+								listId={list._id}
 								isSmallMenu={isSmall}
 								listName={list.name}
 								listIcon={decideListIcon(list.name)}
@@ -63,6 +64,7 @@ const UserStandardsLists: React.FC<Props> = ({
 						return (
 							<ListComponent
 								key={list._id}
+								listId={list._id}
 								isSmallMenu={isSmall}
 								listName={list.name}
 								listEmoji={list.emoji}

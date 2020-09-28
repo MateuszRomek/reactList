@@ -3,11 +3,14 @@ import styled from 'styled-components';
 import { SvgImage } from '../../Shared/SvgContainer';
 import { Link } from 'react-router-dom';
 import { apppendDots } from '../../../utils/appendDots';
+import { useDispatch } from 'react-redux';
+import { setCurrentList } from '../../../redux/ducks/lists';
 interface Props {
 	listName: string;
 	listIcon?: string;
 	listEmoji?: string;
 	isSmallMenu: boolean;
+	listId: string;
 }
 
 interface StyledProps {
@@ -50,9 +53,18 @@ const List: React.FC<Props> = ({
 	listIcon,
 	listName,
 	isSmallMenu,
+	listId,
 }) => {
+	const dispatch = useDispatch();
+	const handleListClick = (id: string) => {
+		dispatch(setCurrentList(id));
+	};
+
 	return (
-		<StyledLink to={`/todos/${listName.toLowerCase()}`}>
+		<StyledLink
+			onClick={() => handleListClick(listId)}
+			to={`/todos/${listName.toLowerCase()}`}
+		>
 			<ListContainer isSmallSideNav={isSmallMenu}>
 				{listEmoji ? (
 					<EmojiSpan>{listEmoji}</EmojiSpan>

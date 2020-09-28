@@ -12,10 +12,10 @@ const TasksListContainer = styled.div`
 `;
 
 const TasksList: React.FC = () => {
-	useEffect(() => {
-		const taskListsContainer = document.querySelector('.tasks');
-		taskListsContainer?.addEventListener('click', (e) => {});
-	});
+	// useEffect(() => {
+	// 	const taskListsContainer = document.querySelector('.tasks');
+	// 	taskListsContainer?.addEventListener('click', (e) => {});
+	// });
 	return (
 		<TasksListContainer className="tasks">
 			<TasksListTitle />
