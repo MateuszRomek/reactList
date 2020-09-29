@@ -45,7 +45,7 @@ const NameContainer = styled.span`
 
 const EmojiSpan = styled.span`
 	display: block;
-	font-size: 1.5rem;
+	font-size: 1.3rem;
 `;
 
 const List: React.FC<Props> = ({

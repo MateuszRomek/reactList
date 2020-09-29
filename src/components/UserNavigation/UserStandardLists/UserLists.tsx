@@ -9,15 +9,18 @@ interface Props {
 	isSmall: boolean;
 	isDefaultLists: boolean;
 	listsArray: List[];
+	isMarginTop: boolean;
 }
 interface StyledProps {
 	isSmall: boolean;
+	isMarginTop: boolean;
 }
 
 const Container = styled.div<StyledProps>`
-	margin-top: ${({ isSmall }) => (isSmall ? '5rem' : '0')};
+	margin-top: ${({ isSmall, isMarginTop }) =>
+		isSmall && isMarginTop ? '5rem' : '0'};
 	display: flex;
-	width: ${({ isSmall }) => (isSmall ? 'auto' : '100%')};
+	width: 100%;
 	flex-direction: column;
 	align-items: ${({ isSmall }) => (isSmall ? 'center' : 'flex-start')};
 	justify-content: center;
@@ -45,9 +48,10 @@ const UserStandardsLists: React.FC<Props> = ({
 	listsArray,
 	isSmall,
 	isDefaultLists,
+	isMarginTop,
 }) => {
 	return (
-		<Container isSmall={isSmall}>
+		<Container isMarginTop={isMarginTop} isSmall={isSmall}>
 			{isDefaultLists
 				? listsArray.map((list) => {
 						return (

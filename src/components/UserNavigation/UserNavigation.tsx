@@ -16,6 +16,7 @@ interface StyledProps {
 const Container = styled.div<StyledProps>`
 	position: relative;
 	display: flex;
+	flex: 280px 1 50px;
 	transition: width 0.2s;
 	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '280px')};
 	height: 100%;
@@ -102,12 +103,14 @@ const UserNavigation: React.FC = () => {
 				userName={user.name}
 			/>
 			<UserLists
+				isMarginTop={true}
 				isDefaultLists={true}
 				listsArray={listsState.defaultLists}
 				isSmall={isSmallSideNav}
 			/>
 			{listsState.userLists.length > 0 ? (
 				<UserLists
+					isMarginTop={false}
 					isDefaultLists={false}
 					listsArray={listsState.userLists}
 					isSmall={isSmallSideNav}

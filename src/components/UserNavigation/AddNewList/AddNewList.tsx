@@ -61,7 +61,6 @@ const AddButton = styled.button`
 	&:hover {
 		cursor: pointer;
 	}
-
 	&:active {
 		outline: none;
 	}

@@ -16,7 +16,7 @@ const Container = styled.div<StyledProps>`
 	position: ${({ isSmall }) => (isSmall ? 'absolute' : 'static')};
 	pointer-events: ${({ isSmall }) => (isSmall ? 'none' : 'all')};
 	color: ${({ theme }) => theme.colors.darkText};
-	width: 260px;
+	width: 280px;
 	word-break: break-all;
 	padding: 0 1.5rem;
 	margin: 1rem 0;
