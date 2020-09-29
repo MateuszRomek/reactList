@@ -1,4 +1,3 @@
-import { listenerCount } from 'process';
 import { Dispatch } from 'react';
 import findList from '../../utils/findList';
 import {
@@ -10,12 +9,19 @@ import {
 	PostListResponse,
 	CREATE_NEW_LIST,
 	FetchUserListsResult,
-	SetCurrentList,
+	ISetCurrentList,
 	SET_CURRENT_LIST,
 	CHANGE_LIST_NAME,
-	ChangeListName,
-	UpdateName,
+	IChangeListName,
+	IUpdateName,
 	UPDATE_LIST_NAME,
+	IUpdateListDataStart,
+	UPDATE_LIST_DATA_START,
+	UPDATE_LIST_DATA_SUCCESS,
+	IUpdateListDataSuccess,
+	UPDATE_LIST_DATA_FAILED,
+	IUpdateListDataFail,
+	UpdateListDataResponse,
 } from './../types/listsTypes';
 
 const initialState: ListsInitialState = {
@@ -82,6 +88,7 @@ const listsReducer = (
 				},
 			};
 		}
+
 		case UPDATE_LIST_NAME: {
 			const { newName } = action;
 			if (newName === undefined) return { ...state };
@@ -183,17 +190,59 @@ export const postNewList = (token: string | null, listName: string) => {
 			.catch((err) => console.log(err));
 	};
 };
-export const setCurrentList = (_id: string): SetCurrentList => ({
+export const setCurrentList = (_id: string): ISetCurrentList => ({
 	type: SET_CURRENT_LIST,
 	_id,
 });
 
-export const changeListName = (newName: string): ChangeListName => ({
+export const changeListName = (newName: string): IChangeListName => ({
 	type: CHANGE_LIST_NAME,
 	newName,
 });
 
-export const updateListName = (newName: string | undefined): UpdateName => ({
+export const updateListName = (newName: string | undefined): IUpdateName => ({
 	type: UPDATE_LIST_NAME,
 	newName,
 });
+
+const updateListDataStart = (): IUpdateListDataStart => ({
+	type: UPDATE_LIST_DATA_START,
+});
+
+const updateListDataSuccess = (): IUpdateListDataSuccess => ({
+	type: UPDATE_LIST_DATA_SUCCESS,
+});
+const updateListDataFailed = (): IUpdateListDataFail => ({
+	type: UPDATE_LIST_DATA_FAILED,
+});
+export const postUpdateListData = (
+	token: string | null,
+	listId: string,
+	value: string,
+	property: string
+) => {
+	return (dispatch: Dispatch<ListsActionTypes>) => {
+		dispatch(updateListDataStart());
+		return fetch('http://localhost:8080/lists/update', {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer  ${token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				listId,
+				value,
+				property,
+			}),
+		})
+			.then((response) => response.json())
+			.then((result: UpdateListDataResponse) => {
+				if (result.status !== 200) throw result;
+				dispatch(updateListDataSuccess());
+			})
+			.catch((err) => {
+				console.log(err);
+				dispatch(updateListDataFailed());
+			});
+	};
+};
