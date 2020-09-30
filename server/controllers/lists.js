@@ -71,3 +71,27 @@ exports.createList = async (req, res, next) => {
 		},
 	});
 };
+
+exports.updateList = async (req, res, next) => {
+	const { userId } = req;
+	const { listId, value, property } = req.body;
+	const list = await List.findOne({ _id: listId });
+	if (list.userId.toString() === userId) {
+		list[property] = value;
+		const result = await list.save();
+		if (result) {
+			res.status(200).json({
+				message: 'List updated',
+				status: 200,
+				listId,
+				updated: property,
+			});
+		} else {
+			res.status(500).json({ message: 'Internal Error', status: 500 });
+		}
+	} else {
+		res
+			.status(401)
+			.json({ message: 'You cannot perform this action', status: 401 });
+	}
+};
