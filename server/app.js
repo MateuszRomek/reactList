@@ -6,6 +6,7 @@ const app = express();
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authentication');
 const listsRoutes = require('./routes/lists');
+const userRoutes = require('./routes/user');
 const cors = require('cors');
 
 app.use(bodyParser.json());
@@ -14,6 +15,7 @@ app.use(cors());
 
 app.use('/auth', authRoutes);
 app.use(listsRoutes);
+app.use(userRoutes);
 app.use((error, req, res, next) => {
 	console.log(error);
 	const status = error.statusCode || 500;
