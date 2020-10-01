@@ -1,6 +1,7 @@
 import React, { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import useListName from '../../../hooks/useListName';
 import {
 	changeListName,
 	postUpdateListData,
@@ -77,20 +78,26 @@ const TasksListTitle: React.FC = () => {
 	const selectedList = useSelector(
 		(state: IlistsReducer) => state.lists.currentList
 	);
+	const [listName, setListName] = useListName();
 	const [isInputVisible, setInputVisible] = useState(false);
 	const dispatch = useDispatch();
 	const inputRef = createRef<HTMLInputElement>();
 	const handleTitleClick = () => {
+		const inputValue = inputRef.current?.value;
+		setListName(inputValue);
 		setInputVisible(true);
 		inputRef.current?.focus();
 	};
+
 	const handleInputBlur = () => {
 		setInputVisible(false);
 		const value = inputRef.current?.value;
-		dispatch(updateListName(value));
-		const t = localStorage.getItem('token');
 		const { _id, name } = selectedList;
-		dispatch(postUpdateListData(t, _id, name, 'name'));
+		if (value !== listName) {
+			const t = localStorage.getItem('token');
+			dispatch(updateListName(value));
+			dispatch(postUpdateListData(t, _id, name, 'name'));
+		}
 		inputRef.current?.blur();
 	};
 	return (
