@@ -285,6 +285,6 @@ export const postUpdateListData = (
 	};
 };
 
-export const updateList = (listId: string): ListsActionTypes => ({
+export const updateList = (): ListsActionTypes => ({
 	type: UPDATE_LIST_ALL_DATA,
 });

@@ -4,7 +4,7 @@ import { SvgImage } from '../../Shared/SvgContainer';
 import { Link } from 'react-router-dom';
 import { apppendDots } from '../../../utils/appendDots';
 import { useDispatch } from 'react-redux';
-import { setCurrentList } from '../../../redux/ducks/lists';
+import { setCurrentList, updateList } from '../../../redux/ducks/lists';
 interface Props {
 	listName: string;
 	listIcon?: string;
@@ -56,7 +56,9 @@ const List: React.FC<Props> = ({
 	listId,
 }) => {
 	const dispatch = useDispatch();
+
 	const handleListClick = (id: string) => {
+		dispatch(updateList());
 		dispatch(setCurrentList(id));
 	};
 
