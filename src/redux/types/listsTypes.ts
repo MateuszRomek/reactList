@@ -8,6 +8,7 @@ export const CREATE_NEW_LIST = 'CREATE_NEW_LIST';
 export const UPDATE_LIST_NAME = 'UPDATE_LIST_NAME';
 export const SET_CURRENT_LIST = 'SET_CURRENT_LIST';
 export const CHANGE_LIST_NAME = 'CHANGE_LIST_NAME';
+export const UPDATE_LIST_ALL_DATA = 'UPDATE_LIST_ALL_DATA';
 export interface List {
 	name: string;
 	emoji: string;
@@ -91,6 +92,10 @@ export interface IUpdateListDataSuccess {
 	type: typeof UPDATE_LIST_DATA_SUCCESS;
 }
 
+export interface IUpdateList {
+	type: typeof UPDATE_LIST_ALL_DATA;
+}
+
 export type ListsActionTypes =
 	| ISaveListDat
 	| ISetFetching
@@ -101,4 +106,5 @@ export type ListsActionTypes =
 	| IUpdateName
 	| IUpdateListDataStart
 	| IUpdateListDataSuccess
-	| IUpdateListDataFail;
+	| IUpdateListDataFail
+	| IUpdateList;

@@ -22,6 +22,7 @@ import {
 	UPDATE_LIST_DATA_FAILED,
 	IUpdateListDataFail,
 	UpdateListDataResponse,
+	UPDATE_LIST_ALL_DATA,
 } from './../types/listsTypes';
 
 const initialState: ListsInitialState = {
@@ -92,7 +93,7 @@ const listsReducer = (
 		case UPDATE_LIST_NAME: {
 			const { newName } = action;
 			if (newName === undefined) return { ...state };
-			const { userLists, currentList } = state;
+			const { userLists, currentList } = { ...state };
 			const currentListName = userLists.find(
 				(list) => list._id === currentList._id
 			)?.name;
@@ -113,6 +114,43 @@ const listsReducer = (
 				};
 			}
 		}
+
+		case UPDATE_LIST_ALL_DATA: {
+			const {
+				_id,
+				color,
+				emoji,
+				isDefaultList,
+				name,
+				todos,
+			} = state.currentList;
+			if (_id === '') return { ...state };
+			const { defaultLists, userLists } = state;
+			const listIndex = isDefaultList
+				? defaultLists.findIndex((list) => list._id === _id)
+				: userLists.findIndex((list) => list._id === _id);
+			const copyLists = isDefaultList ? [...defaultLists] : [...userLists];
+			copyLists[listIndex] = {
+				_id,
+				color,
+				emoji,
+				isDefaultList,
+				name,
+				todos,
+			};
+			if (isDefaultList) {
+				return {
+					...state,
+					defaultLists: copyLists,
+				};
+			} else {
+				return {
+					...state,
+					userLists: copyLists,
+				};
+			}
+		}
+
 		default: {
 			return {
 				...state,
@@ -246,3 +284,7 @@ export const postUpdateListData = (
 			});
 	};
 };
+
+export const updateList = (listId: string): ListsActionTypes => ({
+	type: UPDATE_LIST_ALL_DATA,
+});
