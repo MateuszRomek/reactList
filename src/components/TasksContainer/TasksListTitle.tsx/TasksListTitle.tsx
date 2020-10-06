@@ -1,5 +1,5 @@
 import React, { createRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import useListName from '../../../hooks/useListName';
 import {
@@ -7,8 +7,13 @@ import {
 	postUpdateListData,
 	updateListName,
 } from '../../../redux/ducks/lists';
-import { IlistsReducer } from '../../../redux/types/listsTypes';
 
+import { List } from '../../../redux/types/listsTypes';
+interface Props {
+	setEmojiActive: React.Dispatch<React.SetStateAction<boolean>>;
+	setTopPosition: React.Dispatch<React.SetStateAction<string>>;
+	selectedList: List;
+}
 interface StyledProps {
 	visible: boolean;
 }
@@ -74,10 +79,11 @@ const TitleInput = styled.input<StyledProps>`
 		outline: 1px solid ${({ theme }) => theme.colors.darkText};
 	}
 `;
-const TasksListTitle: React.FC = () => {
-	const selectedList = useSelector(
-		(state: IlistsReducer) => state.lists.currentList
-	);
+const TasksListTitle: React.FC<Props> = ({
+	setEmojiActive,
+	setTopPosition,
+	selectedList,
+}) => {
 	const [listName, setListName] = useListName();
 	const [isInputVisible, setInputVisible] = useState(false);
 	const dispatch = useDispatch();
@@ -104,7 +110,13 @@ const TasksListTitle: React.FC = () => {
 		<HeightProvider>
 			<TitleContainer>
 				{selectedList.isDefaultList ? null : (
-					<EmojiContainer>
+					<EmojiContainer
+						onClick={(e) => {
+							setEmojiActive(true);
+							const top = (e.clientY + 20).toString() + 'px';
+							setTopPosition(top);
+						}}
+					>
 						<EmojiSpan aria-label="emoji" role="img">
 							{selectedList.emoji}
 						</EmojiSpan>

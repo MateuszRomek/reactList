@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import TasksListTitle from './TasksListTitle.tsx/TasksListTitle';
 import AddNewTask from './AddNewTask/AddNewTask';
+import SelectEmoji from './SelectEmoji/SelectEmoji';
+import { useSelector } from 'react-redux';
+import { IlistsReducer } from '../../redux/types/listsTypes';
 const Container = styled.div`
 	display: flex;
 	flex: 1;
@@ -20,15 +23,26 @@ const TasksListContainer = styled.div`
 `;
 
 const TasksContainer: React.FC = () => {
-	// useEffect(() => {
-	// 	const taskListsContainer = document.querySelector('.tasks');
-	// 	taskListsContainer?.addEventListener('click', (e) => {});
-	// });
+	const [isEmojiActive, setEmojiActive] = useState(false);
+	const [topPosition, setTopPosition] = useState('0');
+	const selectedList = useSelector(
+		(state: IlistsReducer) => state.lists.currentList
+	);
 	return (
 		<Container className="tasks">
-			<TasksListTitle />
+			<TasksListTitle
+				selectedList={selectedList}
+				setEmojiActive={setEmojiActive}
+				setTopPosition={setTopPosition}
+			/>
 			<TasksListContainer></TasksListContainer>
 			<AddNewTask />
+			<SelectEmoji
+				listId={selectedList._id}
+				top={topPosition}
+				isEmojiActive={isEmojiActive}
+				setEmojiActive={setEmojiActive}
+			/>
 		</Container>
 	);
 };
