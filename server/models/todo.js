@@ -3,12 +3,11 @@ const Schema = mongoose.Schema;
 
 const todoSchema = new Schema(
 	{
-		listId: {
+		userId: {
 			type: Schema.Types.ObjectId,
 			required: true,
-			ref: 'list',
+			ref: 'user',
 		},
-
 		title: {
 			type: String,
 			required: true,
