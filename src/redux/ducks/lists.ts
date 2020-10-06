@@ -23,6 +23,7 @@ import {
 	IUpdateListDataFail,
 	UpdateListDataResponse,
 	UPDATE_LIST_ALL_DATA,
+	UPDATE_LIST_EMOJI,
 } from './../types/listsTypes';
 
 const initialState: ListsInitialState = {
@@ -115,6 +116,23 @@ const listsReducer = (
 			}
 		}
 
+		case UPDATE_LIST_EMOJI: {
+			const { newEmoji } = action;
+			const { emoji } = state.currentList;
+			if (newEmoji === emoji) return { ...state };
+			const { userLists, currentList } = { ...state };
+			const userListsCopy = userLists.map((list) => {
+				if (list._id === currentList._id) {
+					list.emoji = newEmoji;
+				}
+				return list;
+			});
+			console.log(userListsCopy);
+			return {
+				...state,
+			};
+		}
+
 		case UPDATE_LIST_ALL_DATA: {
 			const {
 				_id,
@@ -178,27 +196,24 @@ const setListsData = (
 export const fetchUserLists = (token: string | null) => {
 	return (dispatch: Dispatch<ListsActionTypes>) => {
 		dispatch(setFetching(true));
-		return (
-			fetch('http://localhost:8080/lists', {
-				method: 'GET',
-				headers: {
-					Authorization: `Bearer  ${token}`,
-				},
-			})
-				.then((response) => response.json())
-				.then((result: FetchUserListsResult) => {
-					if (result.status) throw result;
-					const { defaultLists, userLists } = result;
+		return fetch('http://localhost:8080/lists', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer  ${token}`,
+			},
+		})
+			.then((response) => response.json())
+			.then((result: FetchUserListsResult) => {
+				if (result.status) throw result;
+				const { defaultLists, userLists } = result;
 
-					dispatch(setListsData(defaultLists, userLists));
-					dispatch(setFetching(false));
-				})
-				//TODO dispatch error event
-				.catch((err) => {
-					console.log(err);
-					//message: string, status
-				})
-		);
+				dispatch(setListsData(defaultLists, userLists));
+				dispatch(setFetching(false));
+			})
+			.catch((err) => {
+				console.log(err);
+				//message: string, status
+			});
 	};
 };
 
@@ -287,4 +302,9 @@ export const postUpdateListData = (
 
 export const updateList = (): ListsActionTypes => ({
 	type: UPDATE_LIST_ALL_DATA,
+});
+
+export const updateListEmoji = (newEmoji: string): ListsActionTypes => ({
+	type: UPDATE_LIST_EMOJI,
+	newEmoji,
 });
