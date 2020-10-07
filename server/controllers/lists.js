@@ -74,17 +74,19 @@ exports.createList = async (req, res, next) => {
 
 exports.updateList = async (req, res, next) => {
 	const { userId } = req;
-	const { listId, value, property } = req.body;
-	const list = await List.findOne({ _id: listId });
+	const { listObj } = req.body;
+	const list = await List.findOne({ _id: listObj._id });
 	if (list.userId.toString() === userId) {
-		list[property] = value;
+		list.isDefaultList = listObj.isDefaultList;
+		list.name = listObj.name;
+		list.emoji = listObj.emoji;
+		list.color = listObj.color;
+		list.todos = listObj.todos;
 		const result = await list.save();
 		if (result) {
 			res.status(200).json({
 				message: 'List updated',
 				status: 200,
-				listId,
-				updated: property,
 			});
 		} else {
 			res.status(500).json({ message: 'Internal Error', status: 500 });
