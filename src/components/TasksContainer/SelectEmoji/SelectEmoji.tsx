@@ -7,12 +7,13 @@ import {
 	postUpdateListData,
 	updateListEmoji,
 } from '../../../redux/ducks/lists';
+import { List } from '../../../redux/types/listsTypes';
 
 interface Props {
 	isEmojiActive: boolean;
 	top: string;
 	setEmojiActive: React.Dispatch<React.SetStateAction<boolean>>;
-	listId: string;
+	selectedList: List;
 }
 interface StyledProps {
 	isActive: boolean;
@@ -42,7 +43,7 @@ const SelectEmoji: React.FC<Props> = ({
 	isEmojiActive,
 	top,
 	setEmojiActive,
-	listId,
+	selectedList,
 }) => {
 	const dispatch = useDispatch();
 	return (
@@ -65,7 +66,7 @@ const SelectEmoji: React.FC<Props> = ({
 						const em = emoji.native as string;
 						dispatch(updateListEmoji(em));
 						const t = localStorage.getItem('token');
-						dispatch(postUpdateListData(t, listId, em, 'emoji'));
+						dispatch(postUpdateListData(t, selectedList));
 						setEmojiActive(false);
 					}}
 					showPreview={false}

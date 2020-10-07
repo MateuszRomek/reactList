@@ -98,11 +98,10 @@ const TasksListTitle: React.FC<Props> = ({
 	const handleInputBlur = () => {
 		setInputVisible(false);
 		const value = inputRef.current?.value;
-		const { _id, name } = selectedList;
 		if (value !== listName) {
 			const t = localStorage.getItem('token');
 			dispatch(updateListName(value));
-			dispatch(postUpdateListData(t, _id, name, 'name'));
+			dispatch(postUpdateListData(t, selectedList));
 		}
 		inputRef.current?.blur();
 	};

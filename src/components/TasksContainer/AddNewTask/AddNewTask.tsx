@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { ReactComponent as PlusIcon } from '../../../assets/svg/plusSolid.svg';
+import { postNewTodo } from '../../../redux/ducks/todo';
+interface Props {
+	listId: string;
+}
 const AddNewTaskForm = styled.form`
 	margin-top: auto;
 	width: 100%;
@@ -40,13 +45,26 @@ const AddInput = styled.input`
 	}
 `;
 
-const AddNewTask: React.FC = () => {
+const AddNewTask: React.FC<Props> = ({ listId }) => {
+	const dispatch = useDispatch();
+	const [todoTitle, setTodoTitle] = useState('');
+	const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const t = localStorage.getItem('token');
+		dispatch(postNewTodo(t, todoTitle, listId));
+		setTodoTitle('');
+	};
 	return (
-		<AddNewTaskForm>
+		<AddNewTaskForm onSubmit={(e) => handleFormSubmit(e)}>
 			<AddButton type="submit">
 				<PlusIcon />
 			</AddButton>
-			<AddInput maxLength={240} type="text" />
+			<AddInput
+				value={todoTitle}
+				onChange={(e) => setTodoTitle(e.target.value)}
+				maxLength={240}
+				type="text"
+			/>
 		</AddNewTaskForm>
 	);
 };
