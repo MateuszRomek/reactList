@@ -10,6 +10,7 @@ import { ReactComponent as GripIcon } from '../../assets/svg/gripLines.svg';
 import { IuserReducer } from '../../redux/types/userTypes';
 import { fetchUserLists } from '../../redux/ducks/lists';
 import { IlistsReducer } from '../../redux/types/listsTypes';
+import { fetchUserTodos } from '../../redux/ducks/todo';
 interface StyledProps {
 	isSmallSideNav: boolean;
 }
@@ -84,6 +85,7 @@ const UserNavigation: React.FC = () => {
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		stableDispatch(fetchUserLists(token));
+		stableDispatch(fetchUserTodos(token));
 	}, [stableDispatch]);
 
 	return (
