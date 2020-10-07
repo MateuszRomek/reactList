@@ -10,12 +10,13 @@ export const SET_CURRENT_LIST = 'SET_CURRENT_LIST';
 export const CHANGE_LIST_NAME = 'CHANGE_LIST_NAME';
 export const UPDATE_LIST_ALL_DATA = 'UPDATE_LIST_ALL_DATA';
 export const UPDATE_LIST_EMOJI = 'UPDATE_LIST_EMOJI';
+export const ADD_TODO_TO_LIST = 'ADD_TODO_TO_LIST';
 export interface List {
 	name: string;
 	emoji: string;
 	color: string;
 	_id: string;
-	todos: [];
+	todos: string[];
 	isDefaultList: boolean;
 }
 
@@ -101,6 +102,10 @@ export interface IUpdateEmoji {
 	type: typeof UPDATE_LIST_EMOJI;
 	newEmoji: string;
 }
+export interface IAddNewTodo {
+	type: typeof ADD_TODO_TO_LIST;
+	todoId: string;
+}
 
 export type ListsActionTypes =
 	| ISaveListDat
@@ -110,8 +115,11 @@ export type ListsActionTypes =
 	| ISetCurrentList
 	| IChangeListName
 	| IUpdateName
+	| IUpdateList
+	| IUpdateEmoji
+	| IAddNewTodo;
+
+export type ServerListLogActions =
 	| IUpdateListDataStart
 	| IUpdateListDataSuccess
-	| IUpdateListDataFail
-	| IUpdateList
-	| IUpdateEmoji;
+	| IUpdateListDataFail;
