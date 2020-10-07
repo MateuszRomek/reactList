@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/authentication');
 const listsRoutes = require('./routes/lists');
 const userRoutes = require('./routes/user');
+const todoRoutes = require('./routes/todo');
 const cors = require('cors');
 
 app.use(bodyParser.json());
@@ -16,6 +17,7 @@ app.use(cors());
 app.use('/auth', authRoutes);
 app.use(listsRoutes);
 app.use(userRoutes);
+app.use(todoRoutes);
 app.use((error, req, res, next) => {
 	console.log(error);
 	const status = error.statusCode || 500;
