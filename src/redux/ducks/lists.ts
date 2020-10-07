@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import findList from '../../utils/findList';
+import { TodoActionTypes } from '../types/todoTypes';
 import {
 	ListsInitialState,
 	ListsActionTypes,
@@ -24,6 +25,8 @@ import {
 	UpdateListDataResponse,
 	UPDATE_LIST_ALL_DATA,
 	UPDATE_LIST_EMOJI,
+	ADD_TODO_TO_LIST,
+	ServerListLogActions,
 } from './../types/listsTypes';
 
 const initialState: ListsInitialState = {
@@ -168,7 +171,16 @@ const listsReducer = (
 				};
 			}
 		}
-
+		case ADD_TODO_TO_LIST: {
+			const { todoId } = action;
+			return {
+				...state,
+				currentList: {
+					...state.currentList,
+					todos: [...state.currentList.todos, todoId],
+				},
+			};
+		}
 		default: {
 			return {
 				...state,
@@ -224,7 +236,7 @@ const createNewList = (list: List): ListsActionTypes => ({
 
 export const postNewList = (token: string | null, listName: string) => {
 	return (dispatch: Dispatch<ListsActionTypes>) => {
-		return fetch('http://localhost:8080/lists/create', {
+		return fetch('http://localhost:8080/lists', {
 			method: 'POST',
 			headers: {
 				Authorization: `Bearer  ${token}`,
@@ -268,24 +280,17 @@ const updateListDataSuccess = (): IUpdateListDataSuccess => ({
 const updateListDataFailed = (): IUpdateListDataFail => ({
 	type: UPDATE_LIST_DATA_FAILED,
 });
-export const postUpdateListData = (
-	token: string | null,
-	listId: string,
-	value: string,
-	property: string
-) => {
-	return (dispatch: Dispatch<ListsActionTypes>) => {
+export const postUpdateListData = (token: string | null, list: List) => {
+	return (dispatch: Dispatch<ServerListLogActions>) => {
 		dispatch(updateListDataStart());
-		return fetch('http://localhost:8080/lists/update', {
+		return fetch('http://localhost:8080/lists', {
 			method: 'PUT',
 			headers: {
 				Authorization: `Bearer  ${token}`,
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				listId,
-				value,
-				property,
+				listObj: list,
 			}),
 		})
 			.then((response) => response.json())
@@ -307,4 +312,9 @@ export const updateList = (): ListsActionTypes => ({
 export const updateListEmoji = (newEmoji: string): ListsActionTypes => ({
 	type: UPDATE_LIST_EMOJI,
 	newEmoji,
+});
+
+export const addTodo = (todoId: string): TodoActionTypes => ({
+	type: ADD_TODO_TO_LIST,
+	todoId,
 });
