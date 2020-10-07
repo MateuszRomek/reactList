@@ -22,11 +22,7 @@ const listSchema = new Schema(
 		color: {
 			type: String,
 		},
-		todos: [
-			{
-				todoId: String,
-			},
-		],
+		todos: [],
 	},
 	{ timestamps: true }
 );
