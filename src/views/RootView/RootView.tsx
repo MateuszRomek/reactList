@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IlistsReducer } from '../../redux/types/listsTypes';
 import { IuserReducer } from '../../redux/types/userTypes';
 import { getUserOnRefresh } from '../../redux/ducks/user';
+import { TodoSelector } from '../../redux/types/todoTypes';
+import TaskDetails from '../../components/TaskDetails/TaskDetails';
 const RootGrid = styled.div`
 	display: flex;
 	flex: 1 1 0px;
@@ -18,7 +20,9 @@ const RootViewTemplate: React.FC = () => {
 	const currentList = useSelector(
 		(state: IlistsReducer) => state.lists.currentList
 	);
-
+	const currentTodo = useSelector(
+		(state: TodoSelector) => state.todo.currentTodo._id
+	);
 	const { email, name, userId } = useSelector(
 		(state: IuserReducer) => state.user
 	);
@@ -35,6 +39,7 @@ const RootViewTemplate: React.FC = () => {
 		<RootGrid>
 			<UserNavigation />
 			{currentList._id === '' && currentList.name === '' ? null : <TasksList />}
+			{currentTodo === '' ? null : <TaskDetails />}
 		</RootGrid>
 	);
 };
