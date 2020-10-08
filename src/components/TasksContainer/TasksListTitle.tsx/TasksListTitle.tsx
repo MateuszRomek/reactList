@@ -69,7 +69,7 @@ const TitleInput = styled.input<StyledProps>`
 	font-size: 2.3rem;
 	font-weight: 600;
 	padding: 0.3rem 0.5rem;
-	width: auto;
+	width: 100%;
 	max-width: 99%;
 	position: ${({ visible }) => (visible ? 'static' : 'absolute')};
 	opacity: ${({ visible }) => (visible ? '1' : '0')};

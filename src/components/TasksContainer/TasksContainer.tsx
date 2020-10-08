@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import TasksListTitle from './TasksListTitle.tsx/TasksListTitle';
 import AddNewTask from './AddNewTask/AddNewTask';
 import SelectEmoji from './SelectEmoji/SelectEmoji';
+import Task from './Task/Task';
 import { useSelector } from 'react-redux';
 import { IlistsReducer } from '../../redux/types/listsTypes';
 import { TodoSelector } from '../../redux/types/todoTypes';
+
 const Container = styled.div`
 	display: flex;
 	flex: 1;
@@ -20,7 +22,7 @@ const TasksListContainer = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 1rem;
+	padding: 0 1rem;
 `;
 
 const TasksContainer: React.FC = () => {
@@ -39,13 +41,15 @@ const TasksContainer: React.FC = () => {
 				setTopPosition={setTopPosition}
 			/>
 			<TasksListContainer>
-				{/*
-				//TODO Create Todo item and display it in proper way.
 				{todos
 					.filter(({ _id }) => selectedList.todos.indexOf(_id) > -1)
 					.map((todo) => (
-						<div>{todo.title}</div>
-					))} */}
+						<Task
+							isChecked={todo.isChecked}
+							key={todo._id}
+							todoTitle={todo.title}
+						></Task>
+					))}
 			</TasksListContainer>
 			<AddNewTask listId={selectedList._id} />
 			<SelectEmoji
