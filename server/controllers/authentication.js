@@ -22,7 +22,12 @@ exports.createUser = (req, res, next) => {
 			return bcrypt.hash(password, salt);
 		})
 		.then((hashPass) => {
-			const user = new User({ name, email, password: hashPass });
+			const user = new User({
+				name,
+				email,
+				password: hashPass,
+				currentUserList: '',
+			});
 			return user.save();
 		})
 		.then((user) => {

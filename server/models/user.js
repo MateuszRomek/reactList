@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { string } = require('yup');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -16,12 +17,9 @@ const userSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		lists: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: 'list',
-			},
-		],
+		currentUserList: {
+			type: String,
+		},
 	},
 	{ timestamps: true }
 );

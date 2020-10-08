@@ -15,7 +15,7 @@ exports.getAllLists = async (req, res, next) => {
 	if (lists.length === 0) {
 		return res.status(404).json({ message: 'User does not have any lists' });
 	}
-
+	const user = await User.findOne({ _id: userId });
 	const userLists = lists
 		.filter((list) => list.isDefaultList === false)
 		.map((list) => ({
@@ -41,6 +41,7 @@ exports.getAllLists = async (req, res, next) => {
 		message: 'Lists fetched',
 		defaultLists,
 		userLists,
+		currentList: user.currentUserList,
 	});
 };
 
@@ -82,6 +83,9 @@ exports.updateList = async (req, res, next) => {
 		list.emoji = listObj.emoji;
 		list.color = listObj.color;
 		list.todos = listObj.todos;
+		const user = await User.findOne({ _id: userId });
+		user.currentUserList = list._id;
+		user.save();
 		const result = await list.save();
 		if (result) {
 			res.status(200).json({
