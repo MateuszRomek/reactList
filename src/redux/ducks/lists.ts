@@ -76,7 +76,7 @@ const listsReducer = (
 		case SET_CURRENT_LIST: {
 			const { defaultLists, userLists } = state;
 			const selectedList = findList(action._id, defaultLists, userLists);
-
+			console.log(defaultLists, userLists, selectedList, action._id);
 			return {
 				...state,
 				currentList: selectedList,
@@ -196,6 +196,16 @@ export const setFetching = (fetching: boolean): ListsActionTypes => ({
 	fetching,
 });
 
+export const setCurrentList = (_id: string): ISetCurrentList => ({
+	type: SET_CURRENT_LIST,
+	_id,
+});
+
+export const changeListName = (newName: string): IChangeListName => ({
+	type: CHANGE_LIST_NAME,
+	newName,
+});
+
 const setListsData = (
 	defaultLists: List[],
 	userLists: List[]
@@ -217,14 +227,15 @@ export const fetchUserLists = (token: string | null) => {
 			.then((response) => response.json())
 			.then((result: FetchUserListsResult) => {
 				if (result.status) throw result;
-				const { defaultLists, userLists } = result;
-
+				const { defaultLists, userLists, currentList } = result;
 				dispatch(setListsData(defaultLists, userLists));
 				dispatch(setFetching(false));
+				if (currentList !== '') {
+					dispatch(setCurrentList(currentList));
+				}
 			})
 			.catch((err) => {
 				console.log(err);
-				//message: string, status
 			});
 	};
 };
@@ -255,15 +266,6 @@ export const postNewList = (token: string | null, listName: string) => {
 			.catch((err) => console.log(err));
 	};
 };
-export const setCurrentList = (_id: string): ISetCurrentList => ({
-	type: SET_CURRENT_LIST,
-	_id,
-});
-
-export const changeListName = (newName: string): IChangeListName => ({
-	type: CHANGE_LIST_NAME,
-	newName,
-});
 
 export const updateListName = (newName: string | undefined): IUpdateName => ({
 	type: UPDATE_LIST_NAME,

@@ -32,6 +32,7 @@ export interface FetchUserListsResult {
 	defaultLists: List[];
 	userLists: List[];
 	status?: number;
+	currentList: string;
 }
 
 export interface IlistsReducer {
