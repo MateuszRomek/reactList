@@ -76,7 +76,7 @@ const List: React.FC<Props> = ({
 
 				{!isSmallMenu ? (
 					<NameContainer>
-						{listName.length > 19 ? apppendDots(listName) : listName}
+						{listName.length > 19 ? apppendDots(19, listName) : listName}
 					</NameContainer>
 				) : null}
 			</ListContainer>
