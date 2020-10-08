@@ -14,6 +14,7 @@ const themeData: theme = {
 		lightGray: 'rgb(244, 244, 244)',
 		selectedListLight: 'rgb(237,237,237)',
 		hoverListLight: 'rgb(255,255,255)',
+		darkGray: 'rgb(78,92,99)',
 	},
 };
 
