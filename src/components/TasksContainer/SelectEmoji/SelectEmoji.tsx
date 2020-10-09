@@ -63,7 +63,7 @@ const SelectEmoji: React.FC<Props> = ({
 				<Picker
 					native
 					onSelect={(emoji) => {
-						const em = emoji.native as string;
+						const em = ('native' in emoji ? emoji.native : undefined) as string;
 						dispatch(updateListEmoji(em));
 						const t = localStorage.getItem('token');
 						dispatch(postUpdateListData(t, selectedList));
