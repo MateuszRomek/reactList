@@ -11,14 +11,14 @@ import { IuserReducer } from '../../redux/types/userTypes';
 import { fetchUserLists } from '../../redux/ducks/lists';
 import { IlistsReducer } from '../../redux/types/listsTypes';
 import { fetchUserTodos } from '../../redux/ducks/todo';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 interface StyledProps {
 	isSmallSideNav: boolean;
 }
 const Container = styled.div<StyledProps>`
 	position: relative;
 	display: flex;
-	flex: 230px 1 50px;
-	transition: width 0.2s;
+	transition: width 0.3s;
 	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '230px')};
 	height: 100%;
 	flex-direction: column;
@@ -66,6 +66,9 @@ const ButtonContainer = styled.div<StyledProps>`
 	align-items: center;
 	padding: 1rem 0.9rem 0;
 `;
+const LoadingDiv = styled.div`
+	width: 100%;
+`;
 const UserNavigation: React.FC = () => {
 	const isSmallSideNav = useSelector(
 		(state: UiReducer) => state.ui.sideNavigation.isSmall
@@ -98,12 +101,12 @@ const UserNavigation: React.FC = () => {
 					<GripIcon />
 				</SideMenuButton>
 			</ButtonContainer>
-
-			<UserData
-				isSmall={isSmallSideNav}
-				userEmail={user.email}
-				userName={user.name}
-			/>
+		
+				<UserData
+					isSmall={isSmallSideNav}
+					userEmail={user.email}
+					userName={user.name}
+				/>
 			<UserLists
 				isMarginTop={true}
 				isDefaultLists={true}
@@ -118,7 +121,6 @@ const UserNavigation: React.FC = () => {
 					isSmall={isSmallSideNav}
 				/>
 			) : null}
-
 			<AddNewList userId={user.userId} isSmall={isSmallSideNav} />
 		</Container>
 	);

@@ -25,7 +25,7 @@ const AddInput = styled.input`
 	border: none;
 	background-color: inherit;
 	font-size: 1.4rem;
-	margin-left: 1.2rem;
+	margin-left: 1.65rem;
 	&::placeholder {
 		color: inherit;
 	}
@@ -41,10 +41,10 @@ const AddInput = styled.input`
 
 const AddContainer = styled.form<BackgroudProps & StyledProps>`
 	display: flex;
-	width: ${({ isSmall }) => (isSmall ? '5rem' : '28rem')};
+	width: 23rem;
+	justify-content: flex-start;
 	align-items: center;
-	justify-content: ${({ isSmall }) => (isSmall ? 'center' : 'flex-start')};
-	padding: 0.6rem 1.5rem;
+	padding: 0.6rem 1.65rem;
 	margin: 1rem 0;
 	transition: background-color 0.3s;
 	background-color: ${({ isInputFocused, theme }) =>
@@ -99,7 +99,7 @@ const AddNewList: React.FC<Props> = ({ isSmall, userId }) => {
 				<SvgImage src={PlusIcon} />
 			</AddButton>
 
-			{!isSmall ? (
+	
 				<AddInput
 					onChange={(e) => handleListNameChange(e)}
 					type="text"
@@ -108,7 +108,6 @@ const AddNewList: React.FC<Props> = ({ isSmall, userId }) => {
 					ref={inputRef}
 					placeholder="New list"
 				/>
-			) : null}
 		</AddContainer>
 	);
 };

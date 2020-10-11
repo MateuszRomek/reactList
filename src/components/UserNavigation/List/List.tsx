@@ -25,11 +25,10 @@ const StyledLink = styled(Link)`
 const ListContainer = styled.div<StyledProps>`
 	display: flex;
 	align-items: center;
-	justify-content: ${({ isSmallSideNav }) =>
-		isSmallSideNav ? 'center' : 'flex-start'};
-	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '280px')};
-	padding: 0.9rem 1.5rem;
-	width: 100%;
+	justify-content: flex-start;
+	width: 230px;
+	padding: 0.9rem 1.65rem;
+	
 	color: ${({ theme }) => theme.colors.darkText};
 	&:hover {
 		background-color: ${({ theme }) => theme.colors.hoverListLight};
@@ -40,7 +39,7 @@ const ListContainer = styled.div<StyledProps>`
 const NameContainer = styled.span`
 	display: inline-block;
 	font-size: 1.6rem;
-	margin-left: 1.2rem;
+	margin-left: 1.65rem;
 `;
 
 const EmojiSpan = styled.span`
@@ -72,13 +71,10 @@ const List: React.FC<Props> = ({
 					<EmojiSpan>{listEmoji}</EmojiSpan>
 				) : (
 					<SvgImage src={listIcon} />
-				)}
-
-				{!isSmallMenu ? (
+				)}				
 					<NameContainer>
 						{listName.length > 19 ? apppendDots(19, listName) : listName}
 					</NameContainer>
-				) : null}
 			</ListContainer>
 		</StyledLink>
 	);
