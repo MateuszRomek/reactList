@@ -83,9 +83,6 @@ exports.updateList = async (req, res, next) => {
 		list.emoji = listObj.emoji;
 		list.color = listObj.color;
 		list.todos = listObj.todos;
-		const user = await User.findOne({ _id: userId });
-		user.currentUserList = list._id;
-		user.save();
 		const result = await list.save();
 		if (result) {
 			res.status(200).json({

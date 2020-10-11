@@ -12,25 +12,26 @@ exports.createNewTodo = async (req, res, next) => {
 
 	const createdTodo = await todo.save();
 	if (createdTodo) {
-		res.status(201).json({
-			message: 'Todo created.',
-			status: 201,
-			todo: {
-				_id: createdTodo._id,
-				title: createdTodo.title,
-			},
-		});
+		const list = await List.findOne({ _id: listId });
+		const todosCopy = [...list.todos];
+		todosCopy.push(createdTodo._id.toString());
+
+		list.todos = todosCopy;
+		const updatedListTodos = await list.save();
+		if (updatedListTodos) {
+			res.status(201).json({
+				message: 'Todo created.',
+				status: 201,
+				todo: {
+					_id: createdTodo._id,
+					title: createdTodo.title,
+				},
+			});
+		}
 	} else {
 		const error = new Error('Internal error occured');
 		error.statusCode = 500;
 	}
-
-	const list = await List.findOne({ _id: listId });
-	const todosCopy = [...list.todos];
-	todosCopy.push(createdTodo._id.toString());
-
-	list.todos = todosCopy;
-	list.save();
 };
 
 exports.getTodos = async (req, res, next) => {
