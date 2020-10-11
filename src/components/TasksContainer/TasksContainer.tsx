@@ -22,7 +22,8 @@ const TasksListContainer = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 0 1rem;
+	padding: 1rem 0 1.5rem;
+	overflow-y: auto;
 `;
 
 const TasksContainer: React.FC = () => {
@@ -32,7 +33,6 @@ const TasksContainer: React.FC = () => {
 		(state: IlistsReducer) => state.lists.currentList
 	);
 	const todos = useSelector((state: TodoSelector) => state.todo.todos);
-
 	return (
 		<Container className="tasks">
 			<TasksListTitle
