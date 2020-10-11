@@ -2,11 +2,7 @@ import React, { createRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import useListName from '../../../hooks/useListName';
-import {
-	changeListName,
-	postUpdateListData,
-	updateListName,
-} from '../../../redux/ducks/lists';
+import { postUpdateListData, updateListName } from '../../../redux/ducks/lists';
 
 import { List } from '../../../redux/types/listsTypes';
 interface Props {
@@ -84,6 +80,7 @@ const TasksListTitle: React.FC<Props> = ({
 	setTopPosition,
 	selectedList,
 }) => {
+	const [selectedListName, setSelectedListName] = useState(selectedList.name);
 	const [listName, setListName] = useListName();
 	const [isInputVisible, setInputVisible] = useState(false);
 	const dispatch = useDispatch();
@@ -130,11 +127,11 @@ const TasksListTitle: React.FC<Props> = ({
 								{selectedList.name}
 							</TitleHeader>
 							<TitleInput
-								onChange={(e) => dispatch(changeListName(e.target.value))}
+								onChange={(e) => setSelectedListName(e.target.value)}
 								ref={inputRef}
 								onBlur={handleInputBlur}
 								visible={isInputVisible}
-								value={selectedList.name}
+								value={selectedListName}
 								type="text"
 							/>
 						</>
