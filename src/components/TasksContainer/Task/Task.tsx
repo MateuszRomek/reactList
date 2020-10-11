@@ -16,6 +16,9 @@ const Container = styled.div`
 	background-color: ${({ theme }) => theme.colors.lightGray};
 	display: flex;
 	align-items: center;
+	&:hover {
+		background-color: ${({ theme }) => theme.colors.selectedListLight};
+	}
 `;
 
 const StyledCheckbox = styled.span<StyledProps>`
