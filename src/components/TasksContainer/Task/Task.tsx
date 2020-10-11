@@ -1,9 +1,16 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import {
+	postUpdateTodo,
+	setCurrentTodo,
+	toggleCheckTodo,
+} from '../../../redux/ducks/todo';
 
 interface Props {
 	todoTitle: string;
 	isChecked: boolean;
+	todoId: string;
 }
 interface StyledProps {
 	isChecked: boolean;
@@ -49,7 +56,7 @@ const StyledCheckbox = styled.span<StyledProps>`
 	}
 
 	&:hover::after {
-		opacity: ${({ isChecked }) => (isChecked ? '0' : '1')};
+		opacity: 1;
 	}
 `;
 const CheckboxContainer = styled.div`
@@ -69,11 +76,23 @@ const TodoTitle = styled.p`
 	word-break: break-all;
 `;
 
-const Task: React.FC<Props> = ({ todoTitle, isChecked }) => {
+const Task: React.FC<Props> = ({ todoTitle, isChecked, todoId }) => {
+	const dispatch = useDispatch();
+
+	const handleTaskClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		const targetClass = (e.target as Element).className;
+		if (targetClass.includes('checkbox')) {
+			dispatch(toggleCheckTodo(todoId));
+			const t = localStorage.getItem('token');
+			postUpdateTodo(t, todoId, 'isChecked', '');
+			return;
+		}
+		dispatch(setCurrentTodo(todoId));
+	};
 	return (
-		<Container>
+		<Container onClick={(e) => handleTaskClick(e)}>
 			<CheckboxContainer>
-				<StyledCheckbox isChecked={isChecked} />
+				<StyledCheckbox className="checkbox" isChecked={isChecked} />
 			</CheckboxContainer>
 			<TitleContainer>
 				<TodoTitle>{todoTitle}</TodoTitle>

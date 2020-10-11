@@ -45,10 +45,11 @@ const TasksContainer: React.FC = () => {
 					.filter(({ _id }) => selectedList.todos.indexOf(_id) > -1)
 					.map((todo) => (
 						<Task
+							todoId={todo._id}
 							isChecked={todo.isChecked}
 							key={todo._id}
 							todoTitle={todo.title}
-						></Task>
+						/>
 					))}
 			</TasksListContainer>
 			<AddNewTask listId={selectedList._id} />
