@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const listsController = require('../controllers/lists');
 const isAuth = require('../middleware/isAuth');
+const setCurrentList = require('../middleware/setCurrentList');
 router.get('/lists', isAuth, listsController.getAllLists);
 router.post('/lists', isAuth, listsController.createList);
-router.put('/lists', isAuth, listsController.updateList);
+router.put('/lists', isAuth, setCurrentList, listsController.updateList);
 
 module.exports = router;
