@@ -292,6 +292,7 @@ export const postUpdateListData = (token: string | null, list: List) => {
 			},
 			body: JSON.stringify({
 				listObj: list,
+				listId: list._id
 			}),
 		})
 			.then((response) => response.json())
@@ -319,3 +320,4 @@ export const addTodo = (todoId: string): TodoActionTypes => ({
 	type: ADD_TODO_TO_LIST,
 	todoId,
 });
+
