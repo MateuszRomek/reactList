@@ -1,5 +1,4 @@
 import { IAddNewTodo } from './listsTypes';
-
 export const SET_CURRENT_TODO = 'SET_CURRENT_TODO';
 export const FETCH_USER_TODOS = 'FETCH_USER_TODOS';
 export const FETCH_TODOS_FINISHED = 'FETCH_TODOS_FINISHED';
@@ -10,6 +9,7 @@ export const POST_TODO_START = 'POST_TODO_START';
 export const POST_TODO_FINISHED = 'POST_TODO_FINISHED';
 export const POST_TODO_FAILED = 'POST_TODO_FAILED';
 export const SET_TODOS = 'SET_TODOS';
+export const TOGGLE_TODO_CHECKBOX = 'TOGGLE_TODO_CHECKBOX';
 export interface Todo {
 	title: string;
 	isChecked: boolean;
@@ -67,11 +67,16 @@ export interface ISetTodos {
 	type: typeof SET_TODOS;
 	todos: Todo[];
 }
+export interface IToggleTodoCheck {
+	type: typeof TOGGLE_TODO_CHECKBOX;
+	todoId: string;
+}
 
 export type TodoActionTypes =
 	| ISetTodos
 	| ISetCurrentTodo
 	| ICreateNewTodo
-	| IAddNewTodo;
+	| IAddNewTodo
+	| IToggleTodoCheck;
 
 export type ServerTodoLogActions = IPostTodoInfo | IFetchTodosInfo;

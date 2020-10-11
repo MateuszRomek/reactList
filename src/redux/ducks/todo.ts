@@ -14,6 +14,8 @@ import {
 	ServerTodoLogActions,
 	SET_TODOS,
 	FetchTodosResponse,
+	TOGGLE_TODO_CHECKBOX,
+	SET_CURRENT_TODO,
 } from './../types/todoTypes';
 import { addTodo } from './lists';
 
@@ -54,6 +56,35 @@ const reducer = (
 				todos: todos,
 			};
 		}
+
+		case TOGGLE_TODO_CHECKBOX: {
+			const { todoId } = action;
+			const todosCopy = [...state.todos].map((todo) => {
+				if (todo._id === todoId) {
+					todo.isChecked = !todo.isChecked;
+					return todo;
+				} else {
+					return todo;
+				}
+			});
+			return {
+				...state,
+				todos: todosCopy,
+			};
+		}
+
+		case SET_CURRENT_TODO: {
+			const { todoId } = action;
+			const todo = state.todos.find((todo) => todo._id === todoId);
+			if (todo === undefined) {
+				return { ...state };
+			} else {
+				return {
+					...state,
+					currentTodo: todo,
+				};
+			}
+		}
 		default: {
 			return state;
 		}
@@ -61,6 +92,16 @@ const reducer = (
 };
 
 export default reducer;
+
+export const setCurrentTodo = (todoId: string): TodoActionTypes => ({
+	type: SET_CURRENT_TODO,
+	todoId,
+});
+
+export const toggleCheckTodo = (todoId: string): TodoActionTypes => ({
+	type: TOGGLE_TODO_CHECKBOX,
+	todoId,
+});
 
 const postTodoStart = (): ServerTodoLogActions => ({
 	type: POST_TODO_START,
@@ -143,4 +184,23 @@ export const fetchUserTodos = (token: string | null) => {
 			})
 			.catch((e) => dispatch(fetchTodosFailed()));
 	};
+};
+export const postUpdateTodo = (
+	token: string | null,
+	todoId: string,
+	modelField: string,
+	value: string
+): void => {
+	fetch('http://localhost:8080/todo', {
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer  ${token}`,
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			todoId,
+			modelField,
+			value,
+		}),
+	});
 };
