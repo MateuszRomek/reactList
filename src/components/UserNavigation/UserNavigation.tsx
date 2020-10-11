@@ -11,7 +11,7 @@ import { IuserReducer } from '../../redux/types/userTypes';
 import { fetchUserLists } from '../../redux/ducks/lists';
 import { IlistsReducer } from '../../redux/types/listsTypes';
 import { fetchUserTodos } from '../../redux/ducks/todo';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import Loading from '../UI/Loading/Loading';
 interface StyledProps {
 	isSmallSideNav: boolean;
 }
@@ -66,9 +66,6 @@ const ButtonContainer = styled.div<StyledProps>`
 	align-items: center;
 	padding: 1rem 0.9rem 0;
 `;
-const LoadingDiv = styled.div`
-	width: 100%;
-`;
 const UserNavigation: React.FC = () => {
 	const isSmallSideNav = useSelector(
 		(state: UiReducer) => state.ui.sideNavigation.isSmall
@@ -101,18 +98,27 @@ const UserNavigation: React.FC = () => {
 					<GripIcon />
 				</SideMenuButton>
 			</ButtonContainer>
-		
+
+			{listsState.isFetching ? (
+				<Loading margin="1rem" height={30} count={1} />
+			) : (
 				<UserData
 					isSmall={isSmallSideNav}
 					userEmail={user.email}
 					userName={user.name}
 				/>
-			<UserLists
-				isMarginTop={true}
-				isDefaultLists={true}
-				listsArray={listsState.defaultLists}
-				isSmall={isSmallSideNav}
-			/>
+			)}
+
+			{listsState.isFetching ? (
+				<Loading margin="0" height={30} count={3} />
+			) : (
+				<UserLists
+					isMarginTop={true}
+					isDefaultLists={true}
+					listsArray={listsState.defaultLists}
+					isSmall={isSmallSideNav}
+				/>
+			)}
 			{listsState.userLists.length > 0 ? (
 				<UserLists
 					isMarginTop={false}
@@ -121,7 +127,11 @@ const UserNavigation: React.FC = () => {
 					isSmall={isSmallSideNav}
 				/>
 			) : null}
-			<AddNewList userId={user.userId} isSmall={isSmallSideNav} />
+			{listsState.isFetching ? (
+				<Loading margin="1rem" height={30} count={1} />
+			) : (
+				<AddNewList userId={user.userId} isSmall={isSmallSideNav} />
+			)}
 		</Container>
 	);
 };
