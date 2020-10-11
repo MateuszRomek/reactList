@@ -49,3 +49,25 @@ exports.getTodos = async (req, res, next) => {
 		todos,
 	});
 };
+
+exports.updateTodo = async (req, res, next) => {
+	const { todoId, value, modelField } = req.body;
+	const todo = await Todo.findOne({ _id: todoId });
+	if (modelField === 'isChecked') {
+		todo.isChecked = !todo.isChecked;
+		const result = await todo.save();
+		if (result) {
+			return res.status(200);
+		} else {
+			throw new Error('Internal error occured');
+		}
+	}
+
+	todo[modelField] = value;
+	const result = todo.save();
+	if (result) {
+		res.status(200);
+	} else {
+		throw new Error('Internal error occured');
+	}
+};
