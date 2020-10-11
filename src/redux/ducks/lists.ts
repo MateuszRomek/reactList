@@ -76,7 +76,6 @@ const listsReducer = (
 		case SET_CURRENT_LIST: {
 			const { defaultLists, userLists } = state;
 			const selectedList = findList(action._id, defaultLists, userLists);
-			console.log(defaultLists, userLists, selectedList, action._id);
 			return {
 				...state,
 				currentList: selectedList,

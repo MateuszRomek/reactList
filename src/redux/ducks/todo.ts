@@ -139,7 +139,6 @@ export const fetchUserTodos = (token: string | null) => {
 			.then((result: FetchTodosResponse) => {
 				if (result.status !== 200) throw result;
 				dispatch(fetchTodosFinished());
-				console.log(result);
 				dispatch(setTodos(result.todos));
 			})
 			.catch((e) => dispatch(fetchTodosFailed()));
