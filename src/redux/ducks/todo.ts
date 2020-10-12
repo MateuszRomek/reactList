@@ -16,6 +16,7 @@ import {
 	FetchTodosResponse,
 	TOGGLE_TODO_CHECKBOX,
 	SET_CURRENT_TODO,
+	CHANGE_TODO_NAME,
 } from './../types/todoTypes';
 import { addTodo } from './lists';
 
@@ -85,6 +86,32 @@ const reducer = (
 				};
 			}
 		}
+
+		case CHANGE_TODO_NAME:
+			const { newTitle } = action;
+			if (newTitle === undefined) return { ...state };
+			const { currentTodo, todos } = state;
+			if (newTitle !== currentTodo.title) {
+				const todosCopy = todos.map((todo: Todo) => {
+					if (todo._id === currentTodo._id) {
+						todo.title = newTitle;
+					}
+					return todo;
+				});
+				return {
+					...state,
+					currentTodo: {
+						...state.currentTodo,
+						title: newTitle,
+					},
+					todos: todosCopy,
+				};
+			} else {
+				return {
+					...state,
+				};
+			}
+
 		default: {
 			return state;
 		}
@@ -93,6 +120,10 @@ const reducer = (
 
 export default reducer;
 
+export const updateTodoname = (newTitle: string): TodoActionTypes => ({
+	type: CHANGE_TODO_NAME,
+	newTitle,
+});
 export const setCurrentTodo = (todoId: string): TodoActionTypes => ({
 	type: SET_CURRENT_TODO,
 	todoId,

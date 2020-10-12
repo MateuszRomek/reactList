@@ -97,9 +97,7 @@ const listsReducer = (
 			const { newName } = action;
 			if (newName === undefined) return { ...state };
 			const { userLists, currentList } = { ...state };
-			const currentListName = userLists.find(
-				(list) => list._id === currentList._id
-			)?.name;
+			const currentListName = currentList.name;
 			if (currentListName !== newName) {
 				const userListsCopy = userLists.map((list) => {
 					if (list._id === currentList._id) {
@@ -292,7 +290,7 @@ export const postUpdateListData = (token: string | null, list: List) => {
 			},
 			body: JSON.stringify({
 				listObj: list,
-				listId: list._id
+				listId: list._id,
 			}),
 		})
 			.then((response) => response.json())
@@ -320,4 +318,3 @@ export const addTodo = (todoId: string): TodoActionTypes => ({
 	type: ADD_TODO_TO_LIST,
 	todoId,
 });
-

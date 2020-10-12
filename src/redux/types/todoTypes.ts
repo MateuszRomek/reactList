@@ -10,6 +10,7 @@ export const POST_TODO_FINISHED = 'POST_TODO_FINISHED';
 export const POST_TODO_FAILED = 'POST_TODO_FAILED';
 export const SET_TODOS = 'SET_TODOS';
 export const TOGGLE_TODO_CHECKBOX = 'TOGGLE_TODO_CHECKBOX';
+export const CHANGE_TODO_NAME = 'CHANGE_TODO_NAME';
 export interface Todo {
 	title: string;
 	isChecked: boolean;
@@ -18,7 +19,7 @@ export interface Todo {
 }
 
 export interface ITodoInitialState {
-	todos: Todo[] | [];
+	todos: Todo[];
 	currentTodo: Todo;
 }
 export interface TodoSelector {
@@ -72,11 +73,17 @@ export interface IToggleTodoCheck {
 	todoId: string;
 }
 
+export interface IChangeTodoName {
+	type: typeof CHANGE_TODO_NAME;
+	newTitle: string;
+}
+
 export type TodoActionTypes =
 	| ISetTodos
 	| ISetCurrentTodo
 	| ICreateNewTodo
 	| IAddNewTodo
-	| IToggleTodoCheck;
+	| IToggleTodoCheck
+	| IChangeTodoName;
 
 export type ServerTodoLogActions = IPostTodoInfo | IFetchTodosInfo;
