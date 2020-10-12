@@ -100,7 +100,14 @@ const TasksListTitle: React.FC<Props> = ({
 			dispatch(updateListName(value));
 			dispatch(postUpdateListData(t, selectedList));
 		}
-		inputRef.current?.blur();
+	};
+
+	const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			inputRef.current?.blur();
+		} else {
+			return;
+		}
 	};
 	return (
 		<HeightProvider>
@@ -127,6 +134,7 @@ const TasksListTitle: React.FC<Props> = ({
 								{selectedList.name}
 							</TitleHeader>
 							<TitleInput
+								onKeyPress={(e) => handleEnterKey(e)}
 								onChange={(e) => setSelectedListName(e.target.value)}
 								ref={inputRef}
 								onBlur={handleInputBlur}
