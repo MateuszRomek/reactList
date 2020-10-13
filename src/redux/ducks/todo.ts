@@ -17,6 +17,8 @@ import {
 	TOGGLE_TODO_CHECKBOX,
 	SET_CURRENT_TODO,
 	CHANGE_TODO_NAME,
+	RESET_CURRENT_TODO,
+	CHANGE_TODO_DESC,
 } from './../types/todoTypes';
 import { addTodo } from './lists';
 
@@ -112,6 +114,45 @@ const reducer = (
 				};
 			}
 
+		case RESET_CURRENT_TODO: {
+			const clearTodo: Todo = {
+				title: '',
+				_id: '',
+				isChecked: false,
+				description: '',
+			};
+			return {
+				...state,
+				currentTodo: clearTodo,
+			};
+		}
+
+		case CHANGE_TODO_DESC: {
+			const { newDesc } = action;
+			if (newDesc === undefined) return { ...state };
+			const { currentTodo, todos } = state;
+			if (newDesc !== currentTodo.description) {
+				const todosCopy = todos.map((todo: Todo) => {
+					if (todo._id === currentTodo._id) {
+						todo.description = newDesc;
+					}
+					return todo;
+				});
+				return {
+					...state,
+					currentTodo: {
+						...state.currentTodo,
+						description: newDesc,
+					},
+					todos: todosCopy,
+				};
+			} else {
+				return {
+					...state,
+				};
+			}
+		}
+
 		default: {
 			return state;
 		}
@@ -120,7 +161,14 @@ const reducer = (
 
 export default reducer;
 
-export const updateTodoname = (newTitle: string): TodoActionTypes => ({
+export const resetCurrentTodo = () => ({
+	type: RESET_CURRENT_TODO,
+});
+export const changeTodoDesc = (newDesc: string): TodoActionTypes => ({
+	type: CHANGE_TODO_DESC,
+	newDesc,
+});
+export const changeTodoname = (newTitle: string): TodoActionTypes => ({
 	type: CHANGE_TODO_NAME,
 	newTitle,
 });
