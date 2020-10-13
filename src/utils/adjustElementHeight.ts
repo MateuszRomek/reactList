@@ -1,4 +1,4 @@
-const adjustAreaHeight = <T>(e: React.KeyboardEvent<T>) => {
+const adjustElementHeight = <T>(e: React.KeyboardEvent<T>) => {
 	const areaElement = e.target as HTMLElement;
 	areaElement.style.height =
 		areaElement.scrollHeight > areaElement.clientHeight
@@ -6,4 +6,4 @@ const adjustAreaHeight = <T>(e: React.KeyboardEvent<T>) => {
 			: '35px';
 };
 
-export default adjustAreaHeight;
+export default adjustElementHeight;
