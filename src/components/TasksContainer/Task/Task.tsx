@@ -70,10 +70,12 @@ const TitleContainer = styled.div`
 	padding: 1.5rem 0;
 	flex: 1;
 `;
-const TodoTitle = styled.p`
+const TodoTitle = styled.p<StyledProps>`
 	margin: 0;
 	color: ${({ theme }) => theme.colors.darkText};
 	word-break: break-all;
+	text-decoration-line: ${({ isChecked }) =>
+		isChecked ? 'line-through' : 'none'};
 `;
 
 const Task: React.FC<Props> = ({ todoTitle, isChecked, todoId }) => {
@@ -95,7 +97,7 @@ const Task: React.FC<Props> = ({ todoTitle, isChecked, todoId }) => {
 				<StyledCheckbox className="checkbox" isChecked={isChecked} />
 			</CheckboxContainer>
 			<TitleContainer>
-				<TodoTitle>{todoTitle}</TodoTitle>
+				<TodoTitle isChecked={isChecked}>{todoTitle}</TodoTitle>
 			</TitleContainer>
 		</Container>
 	);
