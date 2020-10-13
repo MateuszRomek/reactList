@@ -18,8 +18,9 @@ interface StyledProps {
 const Container = styled.div<StyledProps>`
 	position: relative;
 	display: flex;
-	transition: width 0.2s;
+	transition: all 0.2s ease;
 	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '230px')};
+	will-change: width;
 	height: 100%;
 	flex-direction: column;
 	align-items: flex-start;
@@ -59,10 +60,8 @@ const SideMenuButton = styled.button<StyledProps>`
 	}
 `;
 const ButtonContainer = styled.div<StyledProps>`
-	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '230px')};
+	width: 50px;
 	display: flex;
-	justify-content: ${({ isSmallSideNav }) =>
-		isSmallSideNav ? 'center' : 'flex-start'};
 	align-items: center;
 	padding: 1rem 0.9rem 0;
 `;
