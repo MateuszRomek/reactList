@@ -62,11 +62,13 @@ exports.updateTodo = async (req, res, next) => {
 			throw new Error('Internal error occured');
 		}
 	}
-
 	todo[modelField] = value;
-	const result = todo.save();
+	const result = await todo.save();
 	if (result) {
-		res.status(200);
+		res.status(200).json({
+			status: 200,
+			message: 'OK',
+		});
 	} else {
 		throw new Error('Internal error occured');
 	}
