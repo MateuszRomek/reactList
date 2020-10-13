@@ -18,7 +18,7 @@ interface StyledProps {
 const Container = styled.div<StyledProps>`
 	position: relative;
 	display: flex;
-	transition: width 0.3s;
+	transition: width 0.2s;
 	width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '230px')};
 	height: 100%;
 	flex-direction: column;
