@@ -8,6 +8,7 @@ exports.createNewTodo = async (req, res, next) => {
 		title,
 		isChecked: false,
 		description: '',
+		deadline: '',
 	});
 
 	const createdTodo = await todo.save();
@@ -42,6 +43,7 @@ exports.getTodos = async (req, res, next) => {
 		isChecked: todo.isChecked,
 		description: todo.description,
 		_id: todo._id,
+		deadline: todo.deadline,
 	}));
 	res.status(200).json({
 		status: 200,
