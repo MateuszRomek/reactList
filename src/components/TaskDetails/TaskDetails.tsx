@@ -5,6 +5,7 @@ import { TodoSelector } from '../../redux/types/todoTypes';
 import HideButton from './HideButton/HideButton';
 import TaskTitle from './TaskTitle/TaskTitle';
 import TaskDescription from './TaskDescription/TaskDescription';
+import TaskDeadline from './TaskDeadline/TaskDeadline';
 interface Props {}
 const TaskDetailsContainer = styled.div`
 	height: 100%;
@@ -28,6 +29,8 @@ const TaskDetails: React.FC<Props> = () => {
 		<TaskDetailsContainer>
 			<Overflow>
 				<TaskTitle todoId={currentTodo._id} taskTitle={currentTodo.title} />
+				<TaskDeadline />
+
 				<TaskDescription
 					taskDesc={currentTodo.description}
 					todoId={currentTodo._id}

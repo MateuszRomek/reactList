@@ -14,6 +14,7 @@ const Container = styled.div`
 	z-index: 20;
 	padding: 1rem 1rem 1.5rem 1rem;
 	background-color: ${({ theme }) => theme.colors.lightGray};
+	border-top: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
 `;
 const Button = styled.button`
 	padding: 1rem;

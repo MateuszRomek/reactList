@@ -16,6 +16,8 @@ interface StyledProps {
 const TaskTitleContainer = styled.div`
 	border: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
 	padding: 1rem;
+	display: flex;
+	align-items: center;
 	background-color: white;
 	overflow: hidden;
 	position: relative;
@@ -23,21 +25,29 @@ const TaskTitleContainer = styled.div`
 const Title = styled.h2<StyledProps>`
 	margin: 0;
 	font-size: 1.6rem;
+	width: 100%;
+	padding: 0.6rem;
 	position: ${({ isVisible }) => (isVisible ? 'static' : 'absolute')};
 	opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
 	top: ${({ isVisible }) => (isVisible ? 'auto' : '0')};
+	z-index: ${({ isVisible }) => (isVisible ? '100' : '10')};
 `;
 const TextArea = styled.textarea<StyledProps>`
 	font-size: 1.6rem;
 	font-family: inherit;
-	height: 35px;
 	resize: none;
+	height: 3.1rem;
 	font-weight: 600;
 	padding: 0.6rem;
 	width: 100%;
 	position: ${({ isVisible }) => (isVisible ? 'static' : 'absolute')};
 	opacity: ${({ isVisible }) => (isVisible ? '1' : '0')};
+	z-index: ${({ isVisible }) => (isVisible ? '100' : '10')};
 	overflow: hidden;
+	&:focus {
+		border: none;
+		outline: 1px solid ${({ theme }) => theme.colors.darkGray};
+	}
 `;
 const TaskTitle: React.FC<Props> = ({ taskTitle, todoId }) => {
 	const [previousName, setPreviousName] = usePreviousName();
@@ -69,6 +79,7 @@ const TaskTitle: React.FC<Props> = ({ taskTitle, todoId }) => {
 			</Title>
 			<TextArea
 				onKeyDown={(e) => adjustElementHeight<HTMLTextAreaElement>(e)}
+				onKeyUp={(e) => adjustElementHeight<HTMLTextAreaElement>(e)}
 				ref={textAreaRef}
 				isVisible={isTextAreaVisible}
 				onBlur={() => handleTextAreaBlur()}
