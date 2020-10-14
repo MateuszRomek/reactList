@@ -16,6 +16,7 @@ const todoSchema = new Schema(
 			type: Boolean,
 			required: true,
 		},
+		deadline: String,
 		description: {
 			type: String,
 		},
