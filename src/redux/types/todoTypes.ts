@@ -19,6 +19,7 @@ export interface Todo {
 	isChecked: boolean;
 	description: string;
 	_id: string;
+	deadline: string;
 }
 
 export interface ITodoInitialState {

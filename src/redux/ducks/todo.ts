@@ -29,6 +29,7 @@ const initialState: ITodoInitialState = {
 		_id: '',
 		isChecked: false,
 		description: '',
+		deadline: '',
 	},
 };
 
@@ -44,6 +45,7 @@ const reducer = (
 				isChecked: false,
 				title,
 				_id,
+				deadline: '',
 			};
 
 			return {
@@ -120,6 +122,7 @@ const reducer = (
 				_id: '',
 				isChecked: false,
 				description: '',
+				deadline: '',
 			};
 			return {
 				...state,
