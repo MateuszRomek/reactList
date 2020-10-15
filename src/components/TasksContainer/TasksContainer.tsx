@@ -16,6 +16,7 @@ const Container = styled.div`
 	width: 100%;
 	height: 100vh;
 	position: relative;
+	will-change: width;
 `;
 
 const TasksListContainer = styled.div`

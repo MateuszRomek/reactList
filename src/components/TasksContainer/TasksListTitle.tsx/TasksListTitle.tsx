@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import usePreviousName from '../../../hooks/usePreviousName';
@@ -91,6 +91,9 @@ const TasksListTitle: React.FC<Props> = ({
 		setInputVisible(true);
 		inputRef.current?.focus();
 	};
+	useEffect(() => {
+		setSelectedListName(selectedList.name);
+	}, [selectedList.name]);
 
 	const handleInputBlur = () => {
 		setInputVisible(false);
