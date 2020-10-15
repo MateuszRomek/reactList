@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { apppendDots } from '../../../utils/appendDots';
 import { useDispatch } from 'react-redux';
 import { setCurrentList, updateList } from '../../../redux/ducks/lists';
+import { resetCurrentTodo } from '../../../redux/ducks/todo';
 interface Props {
 	listName: string;
 	listIcon?: string;
@@ -28,7 +29,7 @@ const ListContainer = styled.div<StyledProps>`
 	justify-content: flex-start;
 	width: 230px;
 	padding: 0.9rem 1.65rem;
-	
+
 	color: ${({ theme }) => theme.colors.darkText};
 	&:hover {
 		background-color: ${({ theme }) => theme.colors.hoverListLight};
@@ -55,12 +56,11 @@ const List: React.FC<Props> = ({
 	listId,
 }) => {
 	const dispatch = useDispatch();
-
 	const handleListClick = (id: string) => {
 		dispatch(updateList());
+		dispatch(resetCurrentTodo());
 		dispatch(setCurrentList(id));
 	};
-
 	return (
 		<StyledLink
 			onClick={() => handleListClick(listId)}
@@ -71,10 +71,16 @@ const List: React.FC<Props> = ({
 					<EmojiSpan>{listEmoji}</EmojiSpan>
 				) : (
 					<SvgImage src={listIcon} />
-				)}				
-					<NameContainer>
-						{listName.length > 19 ? apppendDots(19, listName) : listName}
-					</NameContainer>
+				)}
+				<NameContainer>
+					{window.innerWidth > 945
+						? listName.length > 19
+							? apppendDots(19, listName)
+							: listName
+						: listName.length > 15
+						? apppendDots(15, listName)
+						: listName}
+				</NameContainer>
 			</ListContainer>
 		</StyledLink>
 	);
