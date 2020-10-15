@@ -6,6 +6,7 @@ import {
 	GET_USER_START,
 	GET_USER_FINISH,
 	GET_USER_FAILED,
+	SIGN_OUT_USER,
 } from '../types/userTypes';
 
 const initialState: IinitialState = {
@@ -28,6 +29,13 @@ export default (
 				email: action.email,
 			};
 
+		case SIGN_OUT_USER: {
+			return {
+				email: '',
+				name: '',
+				userId: '',
+			};
+		}
 		default:
 			return {
 				...state,
@@ -44,6 +52,10 @@ export const setUserData = (
 	userId,
 	name,
 	email,
+});
+
+export const signOutUser = (): UserActionTypes => ({
+	type: SIGN_OUT_USER,
 });
 
 type getUserDataStep = 'start' | 'finish' | 'fail';

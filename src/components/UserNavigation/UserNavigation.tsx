@@ -12,6 +12,7 @@ import { fetchUserLists } from '../../redux/ducks/lists';
 import { IlistsReducer } from '../../redux/types/listsTypes';
 import { fetchUserTodos } from '../../redux/ducks/todo';
 import Loading from '../UI/Loading/Loading';
+import LogoutButton from './LogoutButton/LogoutButton';
 interface StyledProps {
 	isSmallSideNav: boolean;
 }
@@ -28,6 +29,10 @@ const Container = styled.div<StyledProps>`
 	border-right: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
 	background-color: ${({ theme }) => theme.colors.lightGray};
 	overflow: hidden;
+
+	@media (max-width: 950px) {
+		width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '200px')};
+	}
 `;
 
 const SideMenuButton = styled.button<StyledProps>`
@@ -65,6 +70,13 @@ const ButtonContainer = styled.div<StyledProps>`
 	align-items: center;
 	padding: 1rem 0.9rem 0;
 `;
+
+const BottomBar = styled.div`
+	width: 100%;
+	margin-top: auto;
+	border-top: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+`;
+
 const UserNavigation: React.FC = () => {
 	const isSmallSideNav = useSelector(
 		(state: UiReducer) => state.ui.sideNavigation.isSmall
@@ -131,6 +143,9 @@ const UserNavigation: React.FC = () => {
 			) : (
 				<AddNewList userId={user.userId} isSmall={isSmallSideNav} />
 			)}
+			<BottomBar>
+				<LogoutButton />
+			</BottomBar>
 		</Container>
 	);
 };
