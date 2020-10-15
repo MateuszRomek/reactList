@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import useListName from '../../../hooks/usePreviousName';
@@ -7,6 +7,7 @@ import adjustElementHeight from '../../../utils/adjustElementHeight';
 interface Props {
 	todoId: string;
 	taskDesc: string;
+	currentListId: string;
 }
 const TextArea = styled.textarea`
 	font-size: 1.6rem;
@@ -24,9 +25,12 @@ const TextArea = styled.textarea`
 	}
 `;
 
-const TaskDescription: React.FC<Props> = ({ taskDesc, todoId }) => {
+const TaskDescription: React.FC<Props> = ({
+	taskDesc,
+	todoId,
+	currentListId,
+}) => {
 	const [localDesc, setLocalDesc] = useState(taskDesc);
-	const textAreaRef = createRef<HTMLTextAreaElement>();
 	const dispatch = useDispatch();
 	const [previousName, setPreviousName] = useListName();
 	useEffect(() => {
@@ -37,12 +41,14 @@ const TaskDescription: React.FC<Props> = ({ taskDesc, todoId }) => {
 		if (previousName !== localDesc) {
 			dispatch(changeTodoDesc(localDesc));
 			const t = localStorage.getItem('token');
-			postUpdateTodo(t, todoId, 'description', localDesc);
+			postUpdateTodo(t, todoId, 'description', localDesc, currentListId);
 		}
 	};
 	return (
 		<TextArea
-			ref={textAreaRef}
+			ref={(x) => {
+				x && (x.style.height = `${x?.scrollHeight}px`);
+			}}
 			onFocus={() => setPreviousName(taskDesc)}
 			onBlur={handleBlur}
 			onKeyDown={(e) => adjustElementHeight<HTMLTextAreaElement>(e)}

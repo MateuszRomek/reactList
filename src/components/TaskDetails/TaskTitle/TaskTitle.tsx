@@ -8,6 +8,7 @@ import adjustElementHeight from '../../../utils/adjustElementHeight';
 interface Props {
 	taskTitle: string;
 	todoId: string;
+	currentListId: string;
 }
 interface StyledProps {
 	isVisible: boolean;
@@ -49,7 +50,7 @@ const TextArea = styled.textarea<StyledProps>`
 		outline: 1px solid ${({ theme }) => theme.colors.darkGray};
 	}
 `;
-const TaskTitle: React.FC<Props> = ({ taskTitle, todoId }) => {
+const TaskTitle: React.FC<Props> = ({ taskTitle, todoId, currentListId }) => {
 	const [previousName, setPreviousName] = usePreviousName();
 	const [isTextAreaVisible, setTextArea] = useState(false);
 	const [localTaskTitle, setLocalTaskTitle] = useState(taskTitle);
@@ -68,7 +69,7 @@ const TaskTitle: React.FC<Props> = ({ taskTitle, todoId }) => {
 		if (previousName !== localTaskTitle) {
 			const t = localStorage.getItem('token');
 			dispatch(changeTodoname(localTaskTitle));
-			postUpdateTodo(t, todoId, 'title', localTaskTitle);
+			postUpdateTodo(t, todoId, 'title', localTaskTitle, currentListId);
 		}
 	};
 

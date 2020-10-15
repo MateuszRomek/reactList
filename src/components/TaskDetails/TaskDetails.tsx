@@ -6,6 +6,7 @@ import HideButton from './HideButton/HideButton';
 import TaskTitle from './TaskTitle/TaskTitle';
 import TaskDescription from './TaskDescription/TaskDescription';
 import TaskDeadline from './TaskDeadline/TaskDeadline';
+import { IlistsReducer } from '../../redux/types/listsTypes';
 interface Props {}
 const TaskDetailsContainer = styled.div`
 	height: 100%;
@@ -25,13 +26,25 @@ const TaskDetails: React.FC<Props> = () => {
 	const currentTodo = useSelector(
 		(state: TodoSelector) => state.todo.currentTodo
 	);
+	const currentListId = useSelector(
+		(state: IlistsReducer) => state.lists.currentList._id
+	);
 	return (
 		<TaskDetailsContainer>
 			<Overflow>
-				<TaskTitle todoId={currentTodo._id} taskTitle={currentTodo.title} />
-				<TaskDeadline />
+				<TaskTitle
+					currentListId={currentListId}
+					todoId={currentTodo._id}
+					taskTitle={currentTodo.title}
+				/>
+				<TaskDeadline
+					currentListId={currentListId}
+					todoId={currentTodo._id}
+					todoDeadline={currentTodo.deadline}
+				/>
 
 				<TaskDescription
+					currentListId={currentListId}
 					taskDesc={currentTodo.description}
 					todoId={currentTodo._id}
 				/>

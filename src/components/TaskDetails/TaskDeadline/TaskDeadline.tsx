@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as DeadlineIcon } from '../../../assets/svg/deadline.svg';
 import CalendarPicker from '../../UI/CalendarPicker/CalendarPicker';
-interface Props {}
+interface Props {
+	todoId: string;
+	todoDeadline: string;
+	currentListId: string;
+}
 const Container = styled.div`
 	width: 100%;
 	margin-top: 2rem;
@@ -25,7 +29,11 @@ interface TopLeftObj {
 	top: number;
 	left: number;
 }
-const TaskDeadline: React.FC<Props> = () => {
+const TaskDeadline: React.FC<Props> = ({
+	todoDeadline,
+	todoId,
+	currentListId,
+}) => {
 	const [isDateOpen, setDateOpen] = useState(false);
 	const [elementPosition, setElementPosition] = useState<TopLeftObj>({
 		top: 0,
@@ -44,6 +52,8 @@ const TaskDeadline: React.FC<Props> = () => {
 		<Container>
 			{isDateOpen && (
 				<CalendarPicker
+					currentListId={currentListId}
+					todoId={todoId}
 					elementPosition={elementPosition}
 					handleBackdrop={handleBackdropClick}
 				/>
@@ -60,7 +70,7 @@ const TaskDeadline: React.FC<Props> = () => {
 					setDateOpen(true);
 				}}
 			>
-				Add your deadline
+				{todoDeadline !== '' ? todoDeadline : 'Add your deadline'}
 			</Text>
 		</Container>
 	);
