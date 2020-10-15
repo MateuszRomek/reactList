@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import 'react-calendar/dist/Calendar.css';
 import Calendar from 'react-calendar';
+import { useDispatch } from 'react-redux';
+import { postUpdateTodo, setTodoDeadline } from '../../../redux/ducks/todo';
 interface Props {
 	handleBackdrop: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 	elementPosition: {
 		top: number;
 		left: number;
 	};
+	todoId: string;
+	currentListId: string;
 }
 interface StyledPorps {
 	top: number;
@@ -37,9 +41,11 @@ const AbsoluteCalendar = styled.div<StyledPorps>`
 const CalendarPicker: React.FC<Props> = ({
 	elementPosition,
 	handleBackdrop,
+	todoId,
+	currentListId,
 }) => {
 	const [date, setDate] = useState<Date | Date[]>(new Date());
-	//TODO Add redux to manage date for calendar
+	const dispatch = useDispatch();
 	return (
 		<Backdrop onClick={(e) => handleBackdrop(e)}>
 			<InnerRealtive data-calendar="backdrop">
@@ -48,6 +54,17 @@ const CalendarPicker: React.FC<Props> = ({
 						locale="en-GB"
 						onChange={(date) => {
 							console.log(date.toLocaleString());
+							const deadlineString = date.toLocaleString().split(',')[0];
+							const deadlineFormat = deadlineString.replace(/\./g, '/');
+							dispatch(setTodoDeadline(deadlineFormat));
+							const t = localStorage.getItem('token');
+							postUpdateTodo(
+								t,
+								todoId,
+								'deadline',
+								deadlineFormat,
+								currentListId
+							);
 							setDate(date);
 						}}
 						value={date}
