@@ -19,6 +19,7 @@ import {
 	CHANGE_TODO_NAME,
 	RESET_CURRENT_TODO,
 	CHANGE_TODO_DESC,
+	SET_TODO_DEADLINE,
 } from './../types/todoTypes';
 import { addTodo } from './lists';
 
@@ -156,6 +157,24 @@ const reducer = (
 			}
 		}
 
+		case SET_TODO_DEADLINE: {
+			const { date } = action;
+			const todosCopy = state.todos.map((todo) => {
+				if (todo._id === state.currentTodo._id) {
+					todo.deadline = date;
+				}
+				return todo;
+			});
+
+			return {
+				...state,
+				currentTodo: {
+					...state.currentTodo,
+					deadline: date,
+				},
+				todos: todosCopy,
+			};
+		}
 		default: {
 			return state;
 		}
@@ -179,7 +198,10 @@ export const setCurrentTodo = (todoId: string): TodoActionTypes => ({
 	type: SET_CURRENT_TODO,
 	todoId,
 });
-
+export const setTodoDeadline = (deadlineDate: string): TodoActionTypes => ({
+	type: SET_TODO_DEADLINE,
+	date: deadlineDate,
+});
 export const toggleCheckTodo = (todoId: string): TodoActionTypes => ({
 	type: TOGGLE_TODO_CHECKBOX,
 	todoId,
@@ -271,7 +293,8 @@ export const postUpdateTodo = (
 	token: string | null,
 	todoId: string,
 	modelField: string,
-	value: string
+	value: string,
+	currentListId?: string
 ): void => {
 	fetch('http://localhost:8080/todo', {
 		method: 'PUT',
@@ -283,6 +306,7 @@ export const postUpdateTodo = (
 			todoId,
 			modelField,
 			value,
+			listId: currentListId,
 		}),
 	});
 };

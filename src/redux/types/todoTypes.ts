@@ -13,7 +13,7 @@ export const TOGGLE_TODO_CHECKBOX = 'TOGGLE_TODO_CHECKBOX';
 export const CHANGE_TODO_NAME = 'CHANGE_TODO_NAME';
 export const RESET_CURRENT_TODO = 'RESET_CURRENT_TODO';
 export const CHANGE_TODO_DESC = 'CHANGE_TODO_DESC';
-
+export const SET_TODO_DEADLINE = 'SET_TODO_DEADLINE';
 export interface Todo {
 	title: string;
 	isChecked: boolean;
@@ -88,6 +88,12 @@ export interface IChangeTodoDesc {
 	type: typeof CHANGE_TODO_DESC;
 	newDesc: string;
 }
+
+export interface ISetTodoDeadline {
+	type: typeof SET_TODO_DEADLINE;
+	date: string;
+}
+
 export type TodoActionTypes =
 	| ISetTodos
 	| ISetCurrentTodo
@@ -96,6 +102,7 @@ export type TodoActionTypes =
 	| IToggleTodoCheck
 	| IChangeTodoName
 	| IResetCurrentTodo
-	| IChangeTodoDesc;
+	| IChangeTodoDesc
+	| ISetTodoDeadline;
 
 export type ServerTodoLogActions = IPostTodoInfo | IFetchTodosInfo;
