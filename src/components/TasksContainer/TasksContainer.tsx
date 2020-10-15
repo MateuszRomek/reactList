@@ -17,6 +17,9 @@ const Container = styled.div`
 	height: 100vh;
 	position: relative;
 	will-change: width;
+	@media (max-width: 950px) {
+		padding-left: 7rem;
+	}
 `;
 
 const TasksListContainer = styled.div`
@@ -30,6 +33,7 @@ const TasksListContainer = styled.div`
 const TasksContainer: React.FC = () => {
 	const [isEmojiActive, setEmojiActive] = useState(false);
 	const [topPosition, setTopPosition] = useState('0');
+
 	const selectedList = useSelector(
 		(state: IlistsReducer) => state.lists.currentList
 	);

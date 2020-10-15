@@ -16,6 +16,13 @@ const TaskDetailsContainer = styled.div`
 	padding: 1.5rem;
 	border-left: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
 	overflow: hidden;
+	@media (max-width: 950px) {
+		position: fixed;
+		top: 0;
+		right: 0;
+		width: 300px;
+		z-index: 1000;
+	}
 `;
 const Overflow = styled.div`
 	height: 100%;

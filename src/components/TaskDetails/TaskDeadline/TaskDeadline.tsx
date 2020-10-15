@@ -64,8 +64,11 @@ const TaskDeadline: React.FC<Props> = ({
 			<Text
 				onClick={(e) => {
 					const targetCoords = (e.target as Element).getBoundingClientRect();
+					const isSmallScreen = window.innerWidth < 950;
 					const correctY = (targetCoords.y += 40);
-					const correctX = (targetCoords.x -= 70);
+					const correctX = isSmallScreen
+						? (targetCoords.x -= 120)
+						: (targetCoords.x -= 70);
 					setElementPosition({ top: correctY, left: correctX });
 					setDateOpen(true);
 				}}

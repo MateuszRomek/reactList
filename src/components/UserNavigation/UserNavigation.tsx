@@ -32,6 +32,9 @@ const Container = styled.div<StyledProps>`
 
 	@media (max-width: 950px) {
 		width: ${({ isSmallSideNav }) => (isSmallSideNav ? '50px' : '200px')};
+		transition: all 0.1s;
+		position: fixed;
+		z-index: ${({ isSmallSideNav }) => (isSmallSideNav ? '800' : '1000')};
 	}
 `;
 
@@ -88,7 +91,7 @@ const UserNavigation: React.FC = () => {
 	const stableDispatch = useCallback(dispatch, []);
 	useEffect(() => {
 		const width = window.innerWidth;
-		if (width < 600) {
+		if (width < 950) {
 			stableDispatch(toggleSideNavigation());
 		}
 	}, [stableDispatch]);
