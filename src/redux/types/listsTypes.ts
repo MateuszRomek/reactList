@@ -11,6 +11,8 @@ export const CHANGE_LIST_NAME = 'CHANGE_LIST_NAME';
 export const UPDATE_LIST_ALL_DATA = 'UPDATE_LIST_ALL_DATA';
 export const UPDATE_LIST_EMOJI = 'UPDATE_LIST_EMOJI';
 export const ADD_TODO_TO_LIST = 'ADD_TODO_TO_LIST';
+export const POST_DELETE_LIST = 'POST_DELETE_LIST';
+export const DELETE_LIST = 'DELETE_LIST';
 export interface List {
 	name: string;
 	emoji: string;
@@ -107,7 +109,13 @@ export interface IAddNewTodo {
 	type: typeof ADD_TODO_TO_LIST;
 	todoId: string;
 }
-
+export interface IPostDeletList {
+	type: typeof POST_DELETE_LIST;
+}
+export interface IDeleteList {
+	type: typeof DELETE_LIST;
+	listId: string;
+}
 export type ListsActionTypes =
 	| ISaveListDat
 	| ISetFetching
@@ -118,9 +126,11 @@ export type ListsActionTypes =
 	| IUpdateName
 	| IUpdateList
 	| IUpdateEmoji
-	| IAddNewTodo;
+	| IAddNewTodo
+	| IDeleteList;
 
 export type ServerListLogActions =
 	| IUpdateListDataStart
 	| IUpdateListDataSuccess
-	| IUpdateListDataFail;
+	| IUpdateListDataFail
+	| IPostDeletList;

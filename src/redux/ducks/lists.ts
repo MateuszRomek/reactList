@@ -27,6 +27,9 @@ import {
 	UPDATE_LIST_EMOJI,
 	ADD_TODO_TO_LIST,
 	ServerListLogActions,
+	POST_DELETE_LIST,
+	IPostDeletList,
+	DELETE_LIST,
 } from './../types/listsTypes';
 
 const initialState: ListsInitialState = {
@@ -178,6 +181,26 @@ const listsReducer = (
 				},
 			};
 		}
+
+		case DELETE_LIST: {
+			const { listId } = action;
+			const userListsCopy = state.userLists.filter(
+				(list) => list._id !== listId
+			);
+			return {
+				...state,
+				currentList: {
+					_id: '',
+					color: '',
+					emoji: '',
+					isDefaultList: false,
+					name: '',
+					todos: [],
+				},
+				userLists: userListsCopy,
+			};
+		}
+
 		default: {
 			return {
 				...state,
@@ -279,6 +302,10 @@ const updateListDataSuccess = (): IUpdateListDataSuccess => ({
 const updateListDataFailed = (): IUpdateListDataFail => ({
 	type: UPDATE_LIST_DATA_FAILED,
 });
+
+const logPostDeleteList = (): IPostDeletList => ({
+	type: POST_DELETE_LIST,
+});
 export const postUpdateListData = (token: string | null, list: List) => {
 	return (dispatch: Dispatch<ServerListLogActions>) => {
 		dispatch(updateListDataStart());
@@ -303,6 +330,42 @@ export const postUpdateListData = (token: string | null, list: List) => {
 				dispatch(updateListDataFailed());
 			});
 	};
+};
+export const deleteList = (listId: string): ListsActionTypes => ({
+	type: DELETE_LIST,
+	listId,
+});
+
+export const postDeleteList = (token: string | null, listId: string) => {
+	console.log(token);
+	return (dispatch: Dispatch<ServerListLogActions>) => {
+		dispatch(logPostDeleteList());
+		return fetch('http://localhost:8080/lists', {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer  ${token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				deleteId: listId,
+			}),
+		});
+	};
+
+	// return (dispatch: Dispatch<ServerListLogActions>) => {
+	// 	dispatch(logPostDeleteList());
+	// 	console.log('elo');
+	// 	// return fetch('http://localhost:8080/lists', {
+	// 	// 	method: 'DELETE',
+	// 	// 	headers: {
+	// 	// 		Authorization: `Bearer  ${token}`,
+	// 	// 		'Content-Type': 'application/json',
+	// 	// 	},
+	// 	// 	body: JSON.stringify({
+	// 	// 		deleteId: listId,
+	// 	// 	}),
+	// 	// });
+	// };
 };
 
 export const updateList = (): ListsActionTypes => ({
