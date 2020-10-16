@@ -21,7 +21,6 @@ interface Props {}
 const LogoutButton: React.FC<Props> = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
-	console.log(history);
 	return (
 		<Btn
 			onClick={() => {

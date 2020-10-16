@@ -2,9 +2,16 @@ import React, { createRef, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import usePreviousName from '../../../hooks/usePreviousName';
-import { postUpdateListData, updateListName } from '../../../redux/ducks/lists';
-
+import {
+	deleteList,
+	postDeleteList,
+	postUpdateListData,
+	updateListName,
+} from '../../../redux/ducks/lists';
+import { ReactComponent as DotsIcon } from '../../../assets/svg/dots.svg';
+import { ReactComponent as BinIcon } from '../../../assets/svg/trash.svg';
 import { List } from '../../../redux/types/listsTypes';
+import { resetCurrentTodo } from '../../../redux/ducks/todo';
 interface Props {
 	setEmojiActive: React.Dispatch<React.SetStateAction<boolean>>;
 	setTopPosition: React.Dispatch<React.SetStateAction<string>>;
@@ -15,7 +22,7 @@ interface StyledProps {
 }
 
 const HeightProvider = styled.div`
-	height: 5rem;
+	min-height: 5rem;
 `;
 
 const TitleContainer = styled.div`
@@ -75,6 +82,56 @@ const TitleInput = styled.input<StyledProps>`
 		outline: 1px solid ${({ theme }) => theme.colors.darkText};
 	}
 `;
+
+const ListOptionsDropdown = styled.div`
+	position: relative;
+	background-color: white;
+	display: block;
+	margin-left: auto;
+`;
+const ListOptionsButton = styled.button`
+	margin: 0;
+	padding: 1rem;
+	display: grid;
+	place-items: center;
+	border: none;
+	outline: none;
+	background-color: white;
+	transition: background-color 0.2s ease-in-out;
+	&:hover {
+		cursor: pointer;
+		background-color: ${({ theme }) => theme.colors.selectedListLight};
+	}
+`;
+
+const ListOptionsMenu = styled.div<StyledProps>`
+	position: absolute;
+	display: ${({ visible }) => (visible ? 'block' : 'none')};
+	width: 15rem;
+	top: 100%;
+	left: -11rem;
+	background-color: white;
+	border-left: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+	border-right: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+	border-bottom: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+`;
+const ListOptionsItem = styled.div`
+	display: flex;
+	align-items: center;
+	width: 100%;
+	border-top: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
+	padding: 1rem 0.5rem;
+	&:hover {
+		cursor: pointer;
+		background-color: ${({ theme }) => theme.colors.selectedListLight};
+	}
+`;
+const ListOptionsText = styled.span`
+	margin-left: 1rem;
+	color: red;
+	font-size: 1.6rem;
+`;
+
 const TasksListTitle: React.FC<Props> = ({
 	setEmojiActive,
 	setTopPosition,
@@ -83,6 +140,7 @@ const TasksListTitle: React.FC<Props> = ({
 	const [selectedListName, setSelectedListName] = useState(selectedList.name);
 	const [listName, setListName] = usePreviousName();
 	const [isInputVisible, setInputVisible] = useState(false);
+	const [isOptionsClicked, setOptionsClicked] = useState(false);
 	const dispatch = useDispatch();
 	const inputRef = createRef<HTMLInputElement>();
 	const handleTitleClick = () => {
@@ -111,6 +169,13 @@ const TasksListTitle: React.FC<Props> = ({
 		} else {
 			return;
 		}
+	};
+
+	const handleListDelete = () => {
+		dispatch(resetCurrentTodo());
+		const t = localStorage.getItem('token');
+		dispatch(postDeleteList(t, selectedList._id));
+		dispatch(deleteList(selectedList._id));
 	};
 	return (
 		<HeightProvider>
@@ -148,6 +213,23 @@ const TasksListTitle: React.FC<Props> = ({
 						</>
 					)}
 				</TitleTextContainer>
+				{!selectedList.isDefaultList && (
+					<ListOptionsDropdown>
+						<ListOptionsButton
+							onClick={() => setOptionsClicked(!isOptionsClicked)}
+						>
+							<DotsIcon style={{ height: '1.6rem', width: '1.6rem' }} />{' '}
+						</ListOptionsButton>
+						<ListOptionsMenu visible={isOptionsClicked}>
+							<ListOptionsItem onClick={handleListDelete}>
+								<BinIcon
+									style={{ height: '1.6rem', width: '1.6rem', color: 'red' }}
+								/>
+								<ListOptionsText>Delete this list</ListOptionsText>
+							</ListOptionsItem>
+						</ListOptionsMenu>
+					</ListOptionsDropdown>
+				)}
 			</TitleContainer>
 		</HeightProvider>
 	);
