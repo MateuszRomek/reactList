@@ -98,3 +98,33 @@ exports.updateList = async (req, res, next) => {
 			.json({ message: 'You cannot perform this action', status: 401 });
 	}
 };
+exports.deleteList = async (req, res, next) => {
+	const { userId } = req;
+	const { deleteId } = req.body;
+	const user = await User.findOne({ _id: userId });
+	let userResult;
+	if (user.currentUserList === deleteId) {
+		user.currentUserList = '';
+		userResult = await user.save();
+	}
+	if (!userResult) {
+		return res.status(500).json({ message: 'Internal Error', status: 500 });
+	}
+	const list = await List.findOne({ _id: deleteId, userId });
+	if (!list) {
+		return res
+			.status(401)
+			.json({ message: 'The user does not have such a list.', status: 401 });
+	}
+	if (list.isDefaultList) {
+		return res
+			.status(403)
+			.json({ message: 'Cannot delete default list', status: 403 });
+	}
+	const result = await List.deleteOne({ _id: deleteId });
+	if (!result) {
+		return res.status(500).json({ message: 'Internal Error', status: 500 });
+	}
+
+	res.status(200).json({ message: 'List has been deleter', status: 200 });
+};
