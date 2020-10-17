@@ -6,4 +6,5 @@ const setCurrentList = require('../middleware/setCurrentList');
 router.post('/todo', isAuth, setCurrentList, todoController.createNewTodo);
 router.get('/todo', isAuth, todoController.getTodos);
 router.put('/todo', isAuth, setCurrentList, todoController.updateTodo);
+router.delete('/todo', isAuth, todoController.deleteTodo);
 module.exports = router;

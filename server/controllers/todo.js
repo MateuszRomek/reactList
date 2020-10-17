@@ -75,3 +75,22 @@ exports.updateTodo = async (req, res, next) => {
 		throw new Error('Internal error occured');
 	}
 };
+
+exports.deleteTodo = async (req, res, next) => {
+	const { todoId } = req.body;
+	const { userId } = req;
+
+	const todo = await Todo.findOne({ _id: todoId, userId });
+	if (!todo) {
+		return res
+			.status(401)
+			.json({ message: 'The user does not have such a todo.', status: 401 });
+	}
+	console.log(todo);
+	const result = await Todo.deleteOne({ _id: todoId });
+	if (!result) {
+		return res.status(500).json({ message: 'Internal Error', status: 500 });
+	}
+
+	res.status(200).json({ message: 'Todo has been deleted', status: 200 });
+};
