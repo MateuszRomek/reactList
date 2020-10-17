@@ -20,6 +20,8 @@ import {
 	RESET_CURRENT_TODO,
 	CHANGE_TODO_DESC,
 	SET_TODO_DEADLINE,
+	POST_DELETE_TODO,
+	DELETE_TODO,
 } from './../types/todoTypes';
 import { addTodo } from './lists';
 
@@ -157,6 +159,15 @@ const reducer = (
 			}
 		}
 
+		case DELETE_TODO: {
+			const { todoId } = action;
+			const todosCopy = state.todos.filter((todo) => todo._id !== todoId);
+			return {
+				...state,
+				todos: todosCopy,
+			};
+		}
+
 		case SET_TODO_DEADLINE: {
 			const { date } = action;
 			const todosCopy = state.todos.map((todo) => {
@@ -183,7 +194,7 @@ const reducer = (
 
 export default reducer;
 
-export const resetCurrentTodo = () => ({
+export const resetCurrentTodo = (): TodoActionTypes => ({
 	type: RESET_CURRENT_TODO,
 });
 export const changeTodoDesc = (newDesc: string): TodoActionTypes => ({
@@ -216,7 +227,9 @@ const postTodoFinished = (): ServerTodoLogActions => ({
 const postTodoFailed = (): ServerTodoLogActions => ({
 	type: POST_TODO_FAILED,
 });
-
+const logDeleteTodo = (): ServerTodoLogActions => ({
+	type: POST_DELETE_TODO,
+});
 const fetchTodosStart = (): ServerTodoLogActions => ({
 	type: FETCH_TODOS_START,
 });
@@ -234,6 +247,11 @@ const createNewTodo = (_id: string, title: string): TodoActionTypes => ({
 const setTodos = (todos: Todo[]): TodoActionTypes => ({
 	type: SET_TODOS,
 	todos,
+});
+
+const deleteTodo = (todoId: string): TodoActionTypes => ({
+	type: DELETE_TODO,
+	todoId,
 });
 export const postNewTodo = (
 	token: string | null,
@@ -309,4 +327,27 @@ export const postUpdateTodo = (
 			listId: currentListId,
 		}),
 	});
+};
+
+export const postDeleteTodo = (todoId: string) => {
+	const token = localStorage.getItem('token');
+	fetch('http://localhost:8080/todo', {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer  ${token}`,
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			todoId,
+		}),
+	});
+};
+
+export const handlePostDeleteTodo = (todoId: string) => {
+	return (dispatch: Dispatch<TodoActionTypes | ServerTodoLogActions>) => {
+		dispatch(resetCurrentTodo());
+		dispatch(deleteTodo(todoId));
+		dispatch(logDeleteTodo());
+		postDeleteTodo(todoId);
+	};
 };

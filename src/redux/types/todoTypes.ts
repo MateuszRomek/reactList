@@ -14,6 +14,8 @@ export const CHANGE_TODO_NAME = 'CHANGE_TODO_NAME';
 export const RESET_CURRENT_TODO = 'RESET_CURRENT_TODO';
 export const CHANGE_TODO_DESC = 'CHANGE_TODO_DESC';
 export const SET_TODO_DEADLINE = 'SET_TODO_DEADLINE';
+export const POST_DELETE_TODO = 'POST_DELETE_TODO';
+export const DELETE_TODO = 'DELETE_TODO';
 export interface Todo {
 	title: string;
 	isChecked: boolean;
@@ -94,6 +96,15 @@ export interface ISetTodoDeadline {
 	date: string;
 }
 
+export interface IPostDeleteTodo {
+	type: typeof POST_DELETE_TODO;
+}
+
+export interface IDeleteTodo {
+	type: typeof DELETE_TODO;
+	todoId: string;
+}
+
 export type TodoActionTypes =
 	| ISetTodos
 	| ISetCurrentTodo
@@ -103,6 +114,10 @@ export type TodoActionTypes =
 	| IChangeTodoName
 	| IResetCurrentTodo
 	| IChangeTodoDesc
-	| ISetTodoDeadline;
+	| ISetTodoDeadline
+	| IDeleteTodo;
 
-export type ServerTodoLogActions = IPostTodoInfo | IFetchTodosInfo;
+export type ServerTodoLogActions =
+	| IPostTodoInfo
+	| IFetchTodosInfo
+	| IPostDeleteTodo;
