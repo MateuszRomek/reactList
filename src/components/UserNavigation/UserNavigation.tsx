@@ -97,9 +97,8 @@ const UserNavigation: React.FC = () => {
 	}, [stableDispatch]);
 
 	useEffect(() => {
-		const token = localStorage.getItem('token');
-		stableDispatch(fetchUserLists(token));
-		stableDispatch(fetchUserTodos(token));
+		stableDispatch(fetchUserLists());
+		stableDispatch(fetchUserTodos());
 	}, [stableDispatch]);
 
 	return (

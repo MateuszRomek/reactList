@@ -56,14 +56,7 @@ const CalendarPicker: React.FC<Props> = ({
 							const deadlineString = date.toLocaleString().split(',')[0];
 							const deadlineFormat = deadlineString.replace(/\./g, '/');
 							dispatch(setTodoDeadline(deadlineFormat));
-							const t = localStorage.getItem('token');
-							postUpdateTodo(
-								t,
-								todoId,
-								'deadline',
-								deadlineFormat,
-								currentListId
-							);
+							postUpdateTodo(todoId, 'deadline', deadlineFormat, currentListId);
 							setDate(date);
 						}}
 						value={date}

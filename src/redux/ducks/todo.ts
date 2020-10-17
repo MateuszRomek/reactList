@@ -1,3 +1,4 @@
+import { getLocalStorageItem } from './../../utils/getLocalStorageItem';
 import { Dispatch } from 'react';
 import {
 	ITodoInitialState,
@@ -253,14 +254,10 @@ const deleteTodo = (todoId: string): TodoActionTypes => ({
 	type: DELETE_TODO,
 	todoId,
 });
-export const postNewTodo = (
-	token: string | null,
-	title: string,
-	listId: string
-) => {
+export const postNewTodo = (title: string, listId: string) => {
 	return (dispatch: Dispatch<ServerTodoLogActions | TodoActionTypes>) => {
 		dispatch(postTodoStart());
-
+		const token = getLocalStorageItem('token');
 		fetch('http://localhost:8080/todo', {
 			method: 'POST',
 			headers: {
@@ -288,9 +285,10 @@ export const postNewTodo = (
 	};
 };
 
-export const fetchUserTodos = (token: string | null) => {
+export const fetchUserTodos = () => {
 	return (dispatch: Dispatch<ServerTodoLogActions | TodoActionTypes>) => {
 		dispatch(fetchTodosStart());
+		const token = getLocalStorageItem('token');
 		fetch('http://localhost:8080/todo', {
 			method: 'GET',
 			headers: {
@@ -308,12 +306,12 @@ export const fetchUserTodos = (token: string | null) => {
 	};
 };
 export const postUpdateTodo = (
-	token: string | null,
 	todoId: string,
 	modelField: string,
 	value: string,
 	currentListId?: string
 ): void => {
+	const token = getLocalStorageItem('token');
 	fetch('http://localhost:8080/todo', {
 		method: 'PUT',
 		headers: {

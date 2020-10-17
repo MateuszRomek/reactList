@@ -65,8 +65,7 @@ const SelectEmoji: React.FC<Props> = ({
 					onSelect={(emoji) => {
 						const em = ('native' in emoji ? emoji.native : undefined) as string;
 						dispatch(updateListEmoji(em));
-						const t = localStorage.getItem('token');
-						dispatch(postUpdateListData(t, selectedList));
+						dispatch(postUpdateListData(selectedList));
 						setEmojiActive(false);
 					}}
 					showPreview={false}

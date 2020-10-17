@@ -9,11 +9,7 @@ import TaskDeadline from './TaskDeadline/TaskDeadline';
 import { IlistsReducer } from '../../redux/types/listsTypes';
 import { ReactComponent as RightChevron } from '../../assets/svg/chevron.svg';
 import { ReactComponent as BinIcon } from '../../assets/svg/trash.svg';
-import {
-	handlePostDeleteTodo,
-	postDeleteTodo,
-	resetCurrentTodo,
-} from '../../redux/ducks/todo';
+import { handlePostDeleteTodo, resetCurrentTodo } from '../../redux/ducks/todo';
 
 interface Props {}
 const TaskDetailsContainer = styled.div`

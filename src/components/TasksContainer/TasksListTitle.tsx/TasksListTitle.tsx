@@ -158,9 +158,8 @@ const TasksListTitle: React.FC<Props> = ({
 		setInputVisible(false);
 		const value = inputRef.current?.value;
 		if (value !== listName) {
-			const t = localStorage.getItem('token');
 			dispatch(updateListName(value));
-			dispatch(postUpdateListData(t, selectedList));
+			dispatch(postUpdateListData(selectedList));
 		}
 	};
 
@@ -174,8 +173,7 @@ const TasksListTitle: React.FC<Props> = ({
 
 	const handleListDelete = () => {
 		dispatch(resetCurrentTodo());
-		const t = localStorage.getItem('token');
-		dispatch(postDeleteList(t, selectedList._id));
+		dispatch(postDeleteList(selectedList._id));
 		dispatch(deleteList(selectedList._id));
 	};
 	return (

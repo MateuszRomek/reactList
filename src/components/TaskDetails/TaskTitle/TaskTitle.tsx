@@ -67,9 +67,8 @@ const TaskTitle: React.FC<Props> = ({ taskTitle, todoId, currentListId }) => {
 	const handleTextAreaBlur = () => {
 		setTextArea(false);
 		if (previousName !== localTaskTitle) {
-			const t = localStorage.getItem('token');
 			dispatch(changeTodoname(localTaskTitle));
-			postUpdateTodo(t, todoId, 'title', localTaskTitle, currentListId);
+			postUpdateTodo(todoId, 'title', localTaskTitle, currentListId);
 		}
 	};
 

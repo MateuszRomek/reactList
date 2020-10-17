@@ -1,10 +1,6 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import {
-	ServerTodoLogActions,
-	TodoActionTypes,
-} from '../../../redux/types/todoTypes';
 
 interface Props {
 	Icon: React.FunctionComponent<

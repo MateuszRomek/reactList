@@ -50,8 +50,7 @@ const AddNewTask: React.FC<Props> = ({ listId }) => {
 	const [todoTitle, setTodoTitle] = useState('');
 	const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const t = localStorage.getItem('token');
-		dispatch(postNewTodo(t, todoTitle, listId));
+		dispatch(postNewTodo(todoTitle, listId));
 		setTodoTitle('');
 	};
 	return (

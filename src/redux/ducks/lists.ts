@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import findList from '../../utils/findList';
+import { getLocalStorageItem } from '../../utils/getLocalStorageItem';
 import { TodoActionTypes } from '../types/todoTypes';
 import {
 	ListsInitialState,
@@ -235,9 +236,10 @@ const setListsData = (
 	userLists,
 });
 
-export const fetchUserLists = (token: string | null) => {
+export const fetchUserLists = () => {
 	return (dispatch: Dispatch<ListsActionTypes>) => {
 		dispatch(setFetching(true));
+		const token = getLocalStorageItem('token');
 		return fetch('http://localhost:8080/lists', {
 			method: 'GET',
 			headers: {
@@ -265,8 +267,10 @@ const createNewList = (list: List): ListsActionTypes => ({
 	list,
 });
 
-export const postNewList = (token: string | null, listName: string) => {
+export const postNewList = (listName: string) => {
 	return (dispatch: Dispatch<ListsActionTypes>) => {
+		const token = getLocalStorageItem('token');
+
 		return fetch('http://localhost:8080/lists', {
 			method: 'POST',
 			headers: {
@@ -306,9 +310,11 @@ const updateListDataFailed = (): IUpdateListDataFail => ({
 const logPostDeleteList = (): IPostDeletList => ({
 	type: POST_DELETE_LIST,
 });
-export const postUpdateListData = (token: string | null, list: List) => {
+export const postUpdateListData = (list: List) => {
 	return (dispatch: Dispatch<ServerListLogActions>) => {
 		dispatch(updateListDataStart());
+		const token = getLocalStorageItem('token');
+
 		return fetch('http://localhost:8080/lists', {
 			method: 'PUT',
 			headers: {
@@ -336,10 +342,11 @@ export const deleteList = (listId: string): ListsActionTypes => ({
 	listId,
 });
 
-export const postDeleteList = (token: string | null, listId: string) => {
-	console.log(token);
+export const postDeleteList = (listId: string) => {
 	return (dispatch: Dispatch<ServerListLogActions>) => {
 		dispatch(logPostDeleteList());
+		const token = getLocalStorageItem('token');
+
 		return fetch('http://localhost:8080/lists', {
 			method: 'DELETE',
 			headers: {
@@ -351,21 +358,6 @@ export const postDeleteList = (token: string | null, listId: string) => {
 			}),
 		});
 	};
-
-	// return (dispatch: Dispatch<ServerListLogActions>) => {
-	// 	dispatch(logPostDeleteList());
-	// 	console.log('elo');
-	// 	// return fetch('http://localhost:8080/lists', {
-	// 	// 	method: 'DELETE',
-	// 	// 	headers: {
-	// 	// 		Authorization: `Bearer  ${token}`,
-	// 	// 		'Content-Type': 'application/json',
-	// 	// 	},
-	// 	// 	body: JSON.stringify({
-	// 	// 		deleteId: listId,
-	// 	// 	}),
-	// 	// });
-	// };
 };
 
 export const updateList = (): ListsActionTypes => ({

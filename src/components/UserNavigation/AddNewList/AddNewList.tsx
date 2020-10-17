@@ -82,8 +82,7 @@ const AddNewList: React.FC<Props> = ({ isSmall, userId }) => {
 	) => {
 		e.preventDefault();
 		if (inputRef.current?.value && newListName.length > 0) {
-			const token = localStorage.getItem('token');
-			dispatch(postNewList(token, newListName));
+			dispatch(postNewList(newListName));
 			inputRef.current.value = '';
 		} else {
 			if (isSmall) {
@@ -99,15 +98,14 @@ const AddNewList: React.FC<Props> = ({ isSmall, userId }) => {
 				<SvgImage src={PlusIcon} />
 			</AddButton>
 
-	
-				<AddInput
-					onChange={(e) => handleListNameChange(e)}
-					type="text"
-					onBlur={() => setInputFocused(false)}
-					onFocus={() => setInputFocused(true)}
-					ref={inputRef}
-					placeholder="New list"
-				/>
+			<AddInput
+				onChange={(e) => handleListNameChange(e)}
+				type="text"
+				onBlur={() => setInputFocused(false)}
+				onFocus={() => setInputFocused(true)}
+				ref={inputRef}
+				placeholder="New list"
+			/>
 		</AddContainer>
 	);
 };

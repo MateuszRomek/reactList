@@ -85,8 +85,7 @@ const Task: React.FC<Props> = ({ todoTitle, isChecked, todoId }) => {
 		const targetClass = (e.target as Element).className;
 		if (targetClass.includes('checkbox')) {
 			dispatch(toggleCheckTodo(todoId));
-			const t = localStorage.getItem('token');
-			postUpdateTodo(t, todoId, 'isChecked', '');
+			postUpdateTodo(todoId, 'isChecked', '');
 			return;
 		}
 		dispatch(setCurrentTodo(todoId));

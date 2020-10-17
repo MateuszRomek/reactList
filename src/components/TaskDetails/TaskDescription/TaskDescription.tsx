@@ -40,8 +40,7 @@ const TaskDescription: React.FC<Props> = ({
 	const handleBlur = () => {
 		if (previousName !== localDesc) {
 			dispatch(changeTodoDesc(localDesc));
-			const t = localStorage.getItem('token');
-			postUpdateTodo(t, todoId, 'description', localDesc, currentListId);
+			postUpdateTodo(todoId, 'description', localDesc, currentListId);
 		}
 	};
 	return (
