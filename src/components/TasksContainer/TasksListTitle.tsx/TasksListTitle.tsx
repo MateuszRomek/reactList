@@ -117,6 +117,7 @@ const ListOptionsMenu = styled.div<StyledProps>`
 `;
 const ListOptionsItem = styled.div`
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	width: 100%;
 	border-top: 1px solid ${({ theme }) => theme.colors.borderGrayColor};
@@ -129,7 +130,7 @@ const ListOptionsItem = styled.div`
 const ListOptionsText = styled.span`
 	margin-left: 1rem;
 	color: red;
-	font-size: 1.6rem;
+	font-size: 1.4rem;
 `;
 
 const TasksListTitle: React.FC<Props> = ({
@@ -223,7 +224,7 @@ const TasksListTitle: React.FC<Props> = ({
 						<ListOptionsMenu visible={isOptionsClicked}>
 							<ListOptionsItem onClick={handleListDelete}>
 								<BinIcon
-									style={{ height: '1.6rem', width: '1.6rem', color: 'red' }}
+									style={{ height: '1.4rem', width: '1.4rem', color: 'red' }}
 								/>
 								<ListOptionsText>Delete this list</ListOptionsText>
 							</ListOptionsItem>
