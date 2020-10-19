@@ -81,6 +81,9 @@ const TitleInput = styled.input<StyledProps>`
 	&:focus {
 		outline: 1px solid ${({ theme }) => theme.colors.darkText};
 	}
+	&:hover {
+		cursor: ${({ visible }) => (visible ? 'text' : 'default')};
+	}
 `;
 
 const ListOptionsDropdown = styled.div`
@@ -129,7 +132,7 @@ const ListOptionsItem = styled.div`
 `;
 const ListOptionsText = styled.span`
 	margin-left: 1rem;
-	color: red;
+	color: ${({ theme }) => theme.colors.red};
 	font-size: 1.4rem;
 `;
 
@@ -222,7 +225,11 @@ const TasksListTitle: React.FC<Props> = ({
 						<ListOptionsMenu visible={isOptionsClicked}>
 							<ListOptionsItem onClick={handleListDelete}>
 								<BinIcon
-									style={{ height: '1.4rem', width: '1.4rem', color: 'red' }}
+									style={{
+										height: '1.4rem',
+										width: '1.4rem',
+										color: 'rgb(195, 52, 52)',
+									}}
 								/>
 								<ListOptionsText>Delete this list</ListOptionsText>
 							</ListOptionsItem>

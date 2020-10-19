@@ -11,6 +11,15 @@ interface Props {
 	todoTitle: string;
 	isChecked: boolean;
 	todoId: string;
+	setContextMenuPosition: React.Dispatch<
+		React.SetStateAction<{
+			x: number;
+			y: number;
+		}>
+	>;
+	setShowContextMenu: React.Dispatch<React.SetStateAction<boolean>>;
+	containerRef: React.RefObject<HTMLDivElement>;
+	setContextTodoId: React.Dispatch<React.SetStateAction<string>>;
 }
 interface StyledProps {
 	isChecked: boolean;
@@ -78,7 +87,15 @@ const TodoTitle = styled.p<StyledProps>`
 		isChecked ? 'line-through' : 'none'};
 `;
 
-const Task: React.FC<Props> = ({ todoTitle, isChecked, todoId }) => {
+const Task: React.FC<Props> = ({
+	todoTitle,
+	isChecked,
+	todoId,
+	setContextMenuPosition,
+	setShowContextMenu,
+	containerRef,
+	setContextTodoId,
+}) => {
 	const dispatch = useDispatch();
 
 	const handleTaskClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -86,16 +103,33 @@ const Task: React.FC<Props> = ({ todoTitle, isChecked, todoId }) => {
 		if (targetClass.includes('checkbox')) {
 			dispatch(toggleCheckTodo(todoId));
 			postUpdateTodo(todoId, 'isChecked', '');
-			return;
+		} else {
+			dispatch(setCurrentTodo(todoId));
 		}
-		dispatch(setCurrentTodo(todoId));
+	};
+
+	const handleContextMenu = (
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
+		e.preventDefault();
+		setContextTodoId(todoId);
+		const containerWidth = (containerRef.current as Element).scrollWidth - 150;
+		const yPosition = e.clientY + 10;
+		if (e.clientX > containerWidth) {
+			const xPosition = e.clientX - 160;
+			setContextMenuPosition({ x: xPosition, y: yPosition });
+			setShowContextMenu(true);
+		} else {
+			setContextMenuPosition({ x: e.clientX + 10, y: yPosition });
+			setShowContextMenu(true);
+		}
 	};
 	return (
 		<Container onClick={(e) => handleTaskClick(e)}>
 			<CheckboxContainer>
 				<StyledCheckbox className="checkbox" isChecked={isChecked} />
 			</CheckboxContainer>
-			<TitleContainer>
+			<TitleContainer onContextMenu={(e) => handleContextMenu(e)}>
 				<TodoTitle isChecked={isChecked}>{todoTitle}</TodoTitle>
 			</TitleContainer>
 		</Container>
