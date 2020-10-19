@@ -7,12 +7,15 @@ import {
 	GET_USER_FINISH,
 	GET_USER_FAILED,
 	SIGN_OUT_USER,
+	SET_AUTH,
 } from '../types/userTypes';
 
 const initialState: IinitialState = {
 	userId: '',
 	name: '',
 	email: '',
+	isAuth: false,
+	isLoading: true,
 };
 
 //Reducer
@@ -24,6 +27,8 @@ export default (
 		case SET_USER_DATA:
 			return {
 				...state,
+				isLoading: false,
+				isAuth: true,
 				userId: action.userId,
 				name: action.name,
 				email: action.email,
@@ -31,9 +36,31 @@ export default (
 
 		case SIGN_OUT_USER: {
 			return {
+				isLoading: true,
+				isAuth: false,
 				email: '',
 				name: '',
 				userId: '',
+			};
+		}
+		case GET_USER_START: {
+			return {
+				...state,
+				isLoading: action.value,
+			};
+		}
+
+		case GET_USER_FINISH: {
+			return {
+				...state,
+				isLoading: action.value,
+			};
+		}
+
+		case GET_USER_FAILED: {
+			return {
+				...state,
+				isLoading: action.value,
 			};
 		}
 		default:
@@ -64,26 +91,33 @@ const getUserData = (step: getUserDataStep): UserActionTypes => {
 		case 'start':
 			return {
 				type: GET_USER_START,
+				value: true,
 			};
 		case 'finish':
 			return {
 				type: GET_USER_FINISH,
+				value: false,
 			};
 
 		case 'fail': {
 			return {
 				type: GET_USER_FAILED,
+				value: false,
 			};
 		}
 
 		default: {
 			return {
 				type: GET_USER_FAILED,
+				value: false,
 			};
 		}
 	}
 };
-
+const setIsAuth = (value: boolean): UserActionTypes => ({
+	type: SET_AUTH,
+	value,
+});
 export const getUserOnRefresh = () => {
 	return async (dispatch: Dispatch<UserActionTypes>) => {
 		const t = localStorage.getItem('token');
@@ -108,9 +142,12 @@ export const getUserOnRefresh = () => {
 			}
 			const { email, name, userId } = data;
 			dispatch(setUserData(userId, name, email));
+			dispatch(setIsAuth(true));
 			dispatch(getUserData('finish'));
 		} catch (err) {
+			dispatch(setIsAuth(false));
 			dispatch(getUserData('fail'));
+			localStorage.removeItem('token');
 		}
 	};
 };
