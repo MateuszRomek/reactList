@@ -54,18 +54,20 @@ exports.getTodos = async (req, res, next) => {
 
 exports.updateTodo = async (req, res, next) => {
 	const { todoId, value, modelField } = req.body;
+	console.log(todoId, value, modelField);
 	const todo = await Todo.findOne({ _id: todoId });
 	if (modelField === 'isChecked') {
 		todo.isChecked = !todo.isChecked;
 		const result = await todo.save();
 		if (result) {
-			return res.status(200);
+			return res.status(200).json({ status: 200, message: 'Task updated' });
 		} else {
 			throw new Error('Internal error occured');
 		}
 	}
 	todo[modelField] = value;
 	const result = await todo.save();
+
 	if (result) {
 		res.status(200).json({
 			status: 200,
